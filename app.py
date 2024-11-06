@@ -26,5 +26,9 @@ def contact():
 def registrarse():
     return render_template('registro.html')
 
+@app.route('/reserva')
+def reserva():
+    return render_template('reserva.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

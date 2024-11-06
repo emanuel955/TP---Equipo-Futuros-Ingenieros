@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,url_for
 
 app = Flask(__name__)
 
@@ -25,6 +25,10 @@ def contact():
 @app.route('/registrarse')
 def registrarse():
     return render_template('registro.html')
+
+@app.route('/reserva')
+def reserva():
+    return render_template('reserva.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

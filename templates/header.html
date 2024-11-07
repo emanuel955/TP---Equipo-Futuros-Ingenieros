@@ -1,0 +1,39 @@
+<header class="header-section">
+    <div class="menu-item">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="logo">
+                        <a href="{{ url_for('index') }}">
+                            <img src="{{ url_for('static', filename='/img/logo') }}" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-10">
+                    <div class="nav-menu">
+                        <nav class="mainmenu">
+                            <ul>
+                                <li class="active"><a href="{{ url_for('index') }}">Home</a></li>
+                                <li><a href="{{ url_for('hoteles') }}">Hoteles</a>
+                                    <ul class="dropdown">
+                                        <li><a href="{{ url_for('rooms') }}">Rooms</a></li>
+                                        <li><a href="#">Family Room</a></li>
+                                        <li><a href="#">Premium Room</a></li>
+                                        <li><a href="#">Individual Room</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="{{ url_for('about') }}">About Us</a></li>
+                                <li><a href="{{ url_for('contact') }}">Contacto</a></li>
+                                <li><a href="{{ url_for('login') }}" style="margin-right: 0px;">Login</a>
+                                    <ul class="dropdown">
+                                        <li><a href="{{ url_for('register') }}">Register</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

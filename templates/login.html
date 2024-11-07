@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
 
-<body>
+{% block title %}Login{% endblock %}
 
-    {% block body %}
-
+{% block content %}
     <!-- Hero Section Begin -->
     <section class="hero-section d-flex flex-column h-100">
         <div class="container">
@@ -45,45 +44,4 @@
             <div class="hs-item set-bg" data-setbg="{{ url_for('static', filename='img/hero/hero-3.jpg') }}"></div>
         </div>
     </section>
-
-    {% endblock %}
-    <!-- Hero Section End -->
-
-    <!-- About Us Section Begin -->
-
-    <!-- About Us Section End -->
-
-    <!-- Services Section End -->
-
-    <!-- Services Section End -->
-
-    <!-- Home Room Section Begin -->
-
-    <!-- Home Room Section End -->
-
-    <!-- Testimonial Section Begin -->
-
-    <!-- Testimonial Section End -->
-
-    <!-- Blog Section Begin -->
-
-    <!-- Blog Section End -->
-
-
-    <!-- Footer Section End -->
-
-    <!-- Search model Begin -->
-    <!-- Search model end -->
-
-    <!-- Js Plugins -->
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/jquery.nice-select.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/jquery.slicknav.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/main.js"></script>
-</body>
-
-</html>
+{% endblock %}

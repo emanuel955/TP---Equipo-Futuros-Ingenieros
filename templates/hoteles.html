@@ -1,32 +1,7 @@
-<!DOCTYPE html>
-<html lang="zxx">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Sona Template">
-    <meta name="keywords" content="Sona, unica, creative, html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sona | Template</title>
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Lora:400,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700&display=swap" rel="stylesheet">
-
-    <!-- Css Styles -->
-    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
-    <link rel="stylesheet" href="css/flaticon.css" type="text/css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
-    <link rel="stylesheet" href="css/nice-select.css" type="text/css">
-    <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
-    <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
-    <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="css/style.css" type="text/css">
-</head>
-
+{% extends 'base.html' %}
+{% block title %}Hoteles{% endblock %}
 <body>
+    {% block content %}
     <!-- Page Preloder -->
     <div id="preloder">
         <div class="loader"></div>
@@ -46,7 +21,7 @@
         </div>
         <div class="header-configure-area">
             <div class="language-option">
-                <img src="img/flag.jpg" alt="">
+                <img src="{{ url_for('static', filename='img/flag.jpg')}} alt="">
                 <span>EN <i class="fa fa-angle-down"></i></span>
                 <div class="flag-dropdown">
                     <ul>
@@ -59,19 +34,19 @@
         </div>
         <nav class="mainmenu mobile-menu">
             <ul>
-                <li class="active"><a href="./index.html">Home</a></li>
-                <li><a href="./rooms.html">Rooms</a></li>
-                <li><a href="./about-us.html">About Us</a></li>
-                <li><a href="./pages.html">Pages</a>
+                <li class="active"><a href="{{ url_for('index.html') }}">Home</a></li>
+                <li><a href="{{ url_for('rooms.html') }}">Rooms</a></li>
+                <li><a href="{{ url_for('about-us.html') }}">About Us</a></li>
+                <li><a href="{{ url_for('pages.html') }}">Pages</a>
                     <ul class="dropdown">
-                        <li><a href="./room-details.html">Room Details</a></li>
-                        <li><a href="./blog-details.html">Blog Details</a></li>
+                        <li><a href="{{ url_for('room-details.html') }}">Room Details</a></li>
+                        <li><a href="{{ url_for('blog-details.html') }}">Blog Details</a></li>
                         <li><a href="#">Family Room</a></li>
                         <li><a href="#">Premium Room</a></li>
                     </ul>
                 </li>
-                <li><a href="./blog.html">News</a></li>
-                <li><a href="./contact.html">Contact</a></li>
+                <li><a href="{{ url_for('blog.html') }}">News</a></li>
+                <li><a href="{{ url_for('contact.html') }}">Contact</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -95,8 +70,8 @@
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="logo">
-                            <a href="./index.html">
-                                <img src="img/logo.png" alt="">
+                            <a href="{{ url_for('index.html') }}">
+                                <img src="{{ url_for('static', filename='img/logo.png')}}" alt="">
                             </a>
                         </div>
                     </div>
@@ -104,9 +79,9 @@
                         <div class="nav-menu">
                             <nav class="mainmenu">
                                 <ul>
-                                    <li><a href="./index.html">Home</a></li>
+                                    <li><a href="{{ url_for('index.html') }}">Home</a></li>
                                     <li class="active"><a href="./rooms.html">Hoteles</a></li>
-                                    <li><a href="./about-us.html">About Us</a></li>
+                                    <li><a href="{{ url_for('about-us.html') }}">About Us</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -125,7 +100,7 @@
                     <div class="breadcrumb-text">
                         <h2>Our Hoteles</h2>
                         <div class="bt-option">
-                            <a href="./home.html">Home</a>
+                            <a href="{{ url_for('home.html') }}">Home</a>
                             <span>Hoteles</span>
                         </div>
                     </div>
@@ -141,7 +116,7 @@
             <div class="row">
                 <div class="col-lg-4 col-md-6">
                     <div class="room-item">
-                        <img src="img/hotel/Construcia-Hyde-158-700x467.jpg" alt="">
+                        <img src="{{ url_for('static', filename='img/hotel/Construcia-Hyde-158-700x467.jpg')}}" alt="">
                         <div class="ri-text">
                             <h4>Premium King Room</h4>
                             <a href="#" class="primary-btn">More Details</a>
@@ -150,7 +125,7 @@
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="room-item">
-                        <img src="img/hotel/hotel-exterior.jpg" alt="">
+                        <img src="{{ url_for('static', filename='img/hotel/hotel-exterior.jpg')}}" alt="">
                         <div class="ri-text">
                             <h4>Deluxe Room</h4>
                             <a href="#" class="primary-btn">More Details</a>
@@ -159,7 +134,7 @@
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="room-item">
-                        <img src="img/hotel/hotel-presidente-4s.jpg" alt="">
+                        <img src="{{ url_for('static', filename='img/hotel/hotel-presidente-4s.jpg')}}" alt="">
                         <div class="ri-text">
                             <h4>Double Room</h4>
                             <a href="#" class="primary-btn">More Details</a>
@@ -168,7 +143,7 @@
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="room-item">
-                        <img src="img/hotel/L_135450_sbe.jpg" alt="">
+                        <img src="{{ url_for('static', filename='img/hotel/L_135450_sbe.jpg')}}" alt="">
                         <div class="ri-text">
                             <h4>Luxury Room</h4>
                             <a href="#" class="primary-btn">More Details</a>
@@ -177,7 +152,7 @@
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="room-item">
-                        <img src="img/hotel/BTMXMY_SUNSETLAGOONVILLAS201-640x360.webp" alt="">
+                        <img src="{{ url_for('static', filename='img/hotel/BTMXMY_SUNSETLAGOONVILLAS201-640x360.webp')}}" alt="">
                         <div class="ri-text">
                             <h4>Room With View</h4>
                             <a href="#" class="primary-btn">More Details</a>
@@ -186,7 +161,7 @@
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="room-item">
-                        <img src="img/hotel/hotel-de-lujo-port-adriano-mallorca.jpg" alt="">
+                        <img src="{{ url_for('static', filename='img/hotel/hotel-de-lujo-port-adriano-mallorca.jpg')}}" alt="">
                         <div class="ri-text">
                             <h4>Small View</h4>
                             <a href="#" class="primary-btn">More Details</a>
@@ -214,7 +189,7 @@
                         <div class="ft-about">
                             <div class="logo">
                                 <a href="#">
-                                    <img src="img/footer-logo.png" alt="">
+                                    <img src="{{ url_for('static', filename='img/footer-logo.png')}}" alt="">
                                 </a>
                             </div>
                             <p>We inspire and reach millions of travelers<br /> across 90 local websites</p>
@@ -282,16 +257,5 @@
         </div>
     </div>
     <!-- Search model end -->
-
-    <!-- Js Plugins -->
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/jquery.nice-select.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/jquery.slicknav.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/main.js"></script>
+    {% endblock %}
 </body>
-
-</html>

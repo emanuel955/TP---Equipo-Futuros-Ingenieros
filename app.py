@@ -3,16 +3,20 @@ from flask import Flask, render_template,url_for
 app = Flask(__name__)
 
 @app.route('/')
-def login():
-    return render_template('login.html')
-
-@app.route('/index')
 def index():
     return render_template('index.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
 
 @app.route('/rooms')
 def rooms():
     return render_template('rooms.html')
+
+@app.route('/hoteles')
+def hoteles():
+    return render_template('hoteles.html')
 
 @app.route('/about')
 def about():

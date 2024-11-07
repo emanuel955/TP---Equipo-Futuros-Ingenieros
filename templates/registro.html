@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Registro{% endblock %}
+{% block title %}Register{% endblock %}
 
 {% block content %}
 <section class="hero-section">
@@ -15,8 +15,8 @@
             </div>
             <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                 <div class="booking-form">
-                    <h3>Registrarse</h3>
-                    <form action="{{ url_for('register') }}" method="post">
+                    <h3>Register</h3>
+                    <form action="{{ url_for('registrarse') }}" method="post">
                         <div class="check-date">
                             <label for="mail">Mail:</label>
                             <input type="text" name="mail" id="mail" required>
@@ -28,18 +28,23 @@
                             <i class="icon_eye"></i>
                         </div>
                         <div class="check-date">
-                            <label for="nombre">Nombre:</label>
+                            <label for="nombre">Name:</label>
                             <input type="text" name="nombre" id="nombre" required>
                         </div>
                         <div class="check-date">
-                            <label for="apellido">Apellido:</label>
+                            <label for="apellido">Surname:</label>
                             <input type="text" name="apellido" id="apellido" required>
                         </div>
-                        <button type="submit">Registrarse</button>
+                        <button type="submit">Register</button>
                     </form>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="hero-slider owl-carousel">
+        <div class="hs-item set-bg" data-setbg="{{ url_for('static', filename='img/hero/hero-1.jpg') }}"></div>
+        <div class="hs-item set-bg" data-setbg="{{ url_for('static', filename='img/hero/hero-2.jpg') }}"></div>
+        <div class="hs-item set-bg" data-setbg="{{ url_for('static', filename='img/hero/hero-3.jpg') }}"></div>
     </div>
 </section>
 {% endblock %}

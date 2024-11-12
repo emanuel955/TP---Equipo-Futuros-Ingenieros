@@ -34,9 +34,5 @@ def registrarse():
 def reserva():
     return render_template('reserva.html')
 
-@app.route('/hoteles')
-def hoteles():
-    return render_template('hoteles.html')
-
 if __name__ == '__main__':
     app.run(debug=True)

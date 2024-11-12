@@ -16,10 +16,19 @@
             <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                 <div class="booking-form">
                     <h3>Register</h3>
-                    <form action="{{ url_for('registrarse') }}" method="post">
+                    <form action="{{ url_for('registrarse') }}" method="POST">
                         <div class="check-date">
                             <label for="mail">Mail:</label>
-                            <input type="text" name="mail" id="mail" required>
+                            {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <ul>
+                                {% for message in messages %}
+                                    <li>{{ message }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% endwith %}
+                            <input type="text" name="mail" id="mail" required value="{{ mail or '' }}">
                             <i class="icon_mail"></i>
                         </div>
                         <div class="check-date">
@@ -29,11 +38,11 @@
                         </div>
                         <div class="check-date">
                             <label for="nombre">Name:</label>
-                            <input type="text" name="nombre" id="nombre" required>
+                            <input type="text" name="nombre" id="nombre" required value="{{ nombre or '' }}">
                         </div>
                         <div class="check-date">
                             <label for="apellido">Surname:</label>
-                            <input type="text" name="apellido" id="apellido" required>
+                            <input type="text" name="apellido" id="apellido" required value="{{ apellido or '' }}">
                         </div>
                         <button type="submit">Register</button>
                     </form>

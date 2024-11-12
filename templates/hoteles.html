@@ -34,19 +34,19 @@
         </div>
         <nav class="mainmenu mobile-menu">
             <ul>
-                <li class="active"><a href="{{ url_for('index.html') }}">Home</a></li>
-                <li><a href="{{ url_for('rooms.html') }}">Rooms</a></li>
-                <li><a href="{{ url_for('about-us.html') }}">About Us</a></li>
-                <li><a href="{{ url_for('pages.html') }}">Pages</a>
+                <li class="active"><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('rooms') }}">Rooms</a></li>
+                <li><a href="{{ url_for('about') }}">About Us</a></li>
+                <li><a href="#">Pages</a>
                     <ul class="dropdown">
-                        <li><a href="{{ url_for('room-details.html') }}">Room Details</a></li>
-                        <li><a href="{{ url_for('blog-details.html') }}">Blog Details</a></li>
+                        <li><a href="#">Room Details</a></li>
+                        <li><a href="#">Blog Details</a></li>
                         <li><a href="#">Family Room</a></li>
                         <li><a href="#">Premium Room</a></li>
                     </ul>
                 </li>
-                <li><a href="{{ url_for('blog.html') }}">News</a></li>
-                <li><a href="{{ url_for('contact.html') }}">Contact</a></li>
+                <li><a href="#">News</a></li>
+                <li><a href="#">Contact</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -70,7 +70,7 @@
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="logo">
-                            <a href="{{ url_for('index.html') }}">
+                            <a href="{{ url_for('index') }}">
                                 <img src="{{ url_for('static', filename='img/logo.png')}}" alt="">
                             </a>
                         </div>
@@ -79,9 +79,9 @@
                         <div class="nav-menu">
                             <nav class="mainmenu">
                                 <ul>
-                                    <li><a href="{{ url_for('index.html') }}">Home</a></li>
-                                    <li class="active"><a href="./rooms.html">Hoteles</a></li>
-                                    <li><a href="{{ url_for('about-us.html') }}">About Us</a></li>
+                                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                                    <li class="active"><a href="./rooms">Hoteles</a></li>
+                                    <li><a href="{{ url_for('about') }}">About Us</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -100,7 +100,7 @@
                     <div class="breadcrumb-text">
                         <h2>Our Hoteles</h2>
                         <div class="bt-option">
-                            <a href="{{ url_for('home.html') }}">Home</a>
+                            <a href="{{ url_for('index') }}">Home</a>
                             <span>Hoteles</span>
                         </div>
                     </div>

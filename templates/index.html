@@ -293,25 +293,6 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-8 offset-lg-2">
-                    <div class="testimonial-slider owl-carousel">
-                        {% for testimonio in testimonios %}
-                            <div class="ts-item">
-                                <p>{{ testimonio["resena"] }}</p>
-                                <div class="ti-author">
-                                    <div class="rating">
-                                        {% for i in range(0, testimonio["estrellas"]) %}    
-                                            <i class="icon_star"></i>
-                                        {% endfor %}
-                                    </div>
-                                    <h5> - {{ testimonio["nombre"] }}</h5>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
     <!-- Testimonial Section End -->

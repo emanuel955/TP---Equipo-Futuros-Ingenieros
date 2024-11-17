@@ -1,5 +1,8 @@
+from hashlib import new
 from flask import Flask, render_template, url_for, request, jsonify, redirect, flash, session
 import requests
+# import requests
+from db import models
 from mysql.connector import connect, Error
 
 app = Flask(__name__)
@@ -34,14 +37,11 @@ def test_db():
 
 @app.route('/')
 def index():
-    try:
-        response = requests.get(API_URL+'testimonios')
-        response.raise_for_status()
-        testimonios = response.json()
-    except requests.exceptions.RequestException as e:
-        print (f"Error fetching data: {e}")
-        testimonios = []
-    return render_template('index.html', testimonios=testimonios)
+    return render_template('index.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
 
 @app.route('/rooms')
 def rooms():
@@ -49,6 +49,8 @@ def rooms():
 
 @app.route('/hoteles')
 def hoteles():
+    models.Hoteles()
+    session_hoteles = Session(en)
     return render_template('hoteles.html')
 
 @app.route('/about')
@@ -62,6 +64,10 @@ def contact():
 @app.route('/reserva')
 def reserva():
     return render_template('reserva.html')
+
+@app.route('/registrarse')
+def registrarse():
+    return render_template('registrarse.html')
 
 if __name__ == '__main__':
     app.run(host = '0.0.0.0', debug=True)

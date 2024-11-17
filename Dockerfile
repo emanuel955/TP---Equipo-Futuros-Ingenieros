@@ -9,6 +9,7 @@ COPY . /app
 
 # Instala las dependencias del proyecto
 RUN pip install flask mysql-connector-python
+RUN pip install -U Flask-SQLAlchemy
 RUN pip install requests
 
 # Expone el puerto 5000 para Flask 3600 para MySQL

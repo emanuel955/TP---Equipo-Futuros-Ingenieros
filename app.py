@@ -3,6 +3,7 @@ from flask import Flask, render_template, url_for, request, jsonify, redirect, f
 import requests
 # import requests
 from db import models
+from db.consultas.hoteles import Select_hoteles_all
 from mysql.connector import connect, Error
 
 app = Flask(__name__)
@@ -50,8 +51,8 @@ def rooms():
 @app.route('/hoteles')
 def hoteles():
     models.Hoteles()
-    session_hoteles = Session(en)
-    return render_template('hoteles.html')
+    response = Select_hoteles_all()
+    return render_template('hoteles.html',response=response)
 
 @app.route('/about')
 def about():

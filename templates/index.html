@@ -20,10 +20,10 @@
                             <div class="select-option">
                                 <label for="guest">Destino:</label>
                                 <select id="guest">
-                                    <option value="">Buenos Aires</option>
-                                    <option value="">Cordoba</option>
-                                    <option value="">Mendoza</option>
-                                    <option value="">Neuquén</option>
+                                    {{hoteles}}
+                                    {%for Hotel in hoteles%}
+                                    <option value="">{{Hotel['name_hotel']}} </option>
+                                    {%endfor%}
                                 </select>
                             </div>
                             <div class="check-date">

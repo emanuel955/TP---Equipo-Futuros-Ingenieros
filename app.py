@@ -1,44 +1,35 @@
 from flask import Flask, jsonify, request,render_template,url_for,redirect,flash,session
-from sqlalchemy import create_engine, text 
-from sqlalchemy.orm import sessionmaker, scoped_session 
-from flask_sqlalchemy import SQLAlchemy
-
-
-
-#No se crear una base de datos global siendo que el codigo es local,lo que hice fue: descargar SQL + SQLworkbench
-#Despues crear un usuario con nombre root,contraseña Hoteles123 y cuando se crea la base de datos con nombre Hoteles
-#Todos esos datos van aca abajo en el DATABASE_URI -> root es el usuario -> Hoteles123 es la password -> /Hoteles el nombre de la base de datos
-#Hay que darle connect a la base de datos y ya nos podemos conectar
-#La clase usuario crea la tabla usuario, de querer crear otra tabla, hacerla antes de with app.app_context():
-#                                                                                         db.create_all()
-DATABASE_URI = 'mysql://root:Hoteles123@localhost/Hoteles'  
-QUERY_MAIL_REPETIDO = "SELECT mail FROM usuarios WHERE mail = :mail"
-QUERY_INGRESAR_USUARIO = "INSERT INTO usuarios (mail,password,nombre,apellido) VALUES (:mail,:password,:nombre,:apellido)"
-QUERY_LOGIN_USUARIO = "SELECT mail FROM usuarios WHERE mail = :mail and password = :password"
+from mysql.connector import connect, Error
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'llave_secreta' 
 
-db = SQLAlchemy(app)
-class Usuario(db.Model):
-    __tablename__ = 'Usuarios'
+# Configuración para conectar a MySQL
+app.config['MYSQL_HOST'] = 'mysql_db'  # Nombre del servicio MySQL en Docker Compose
+app.config['MYSQL_USER'] = 'flask_user'  # Usuario configurado en docker-compose.yml
+app.config['MYSQL_PASSWORD'] = 'flask_password'  # Contraseña del usuario de MySQL
+app.config['MYSQL_DATABASE'] = 'flask_database'  # Base de datos que usará la aplicación
 
-    id = db.Column(db.Integer, primary_key=True)
-    mail = db.Column(db.String(200), unique=True, nullable=False)
-    password = db.Column(db.String(200), nullable=False)
-    nombre = db.Column(db.String(50), nullable=False)
-    apellido = db.Column(db.String(100), nullable=False)
-
-    def __repr__(self):
-        return f'<User {self.mail}>'
+# Conexión a la base de datos
+def get_db_connection():
+    try:
+        connection = connect(
+            host=app.config['MYSQL_HOST'],
+            user=app.config['MYSQL_USER'],
+            password=app.config['MYSQL_PASSWORD'],
+            database=app.config['MYSQL_DATABASE']
+        )
+        return connection
+    except Error as e:
+        print("Error de conexión:", e)
+        return None
     
-with app.app_context():
-    db.create_all()
-
-engine = create_engine(DATABASE_URI)
-Session = scoped_session(sessionmaker(bind=engine))
+@app.route('/test_db')
+def test_db():
+    connection = get_db_connection()
+    if connection:
+        return "Conexión a la base de datos MySQL exitosa"
+    else:
+        return "Error al conectar a la base de datos MySQL"
 
 @app.route('/')
 def index():

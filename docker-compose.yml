@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: flask_app
+    ports:
+      - "5000:5000"  # Exponer Flask en el puerto 5000
+    volumes:
+      - .:/app  # Monta el directorio actual en el contenedor para el desarrollo
+      
+  mysql_db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password  # Contraseña del usuario root
+      MYSQL_DATABASE: flask_database  # Nombre de la base de datos
+      MYSQL_USER: flask_user  # Usuario de la base de datos
+      MYSQL_PASSWORD: flask_password  # Contraseña del usuario de la base de datos
+    ports:
+      - "3306:3306"  # Exponer MySQL en el puerto 3306
+    volumes:
+      - mysql_data:/var/lib/mysql  # Volumen persistente para los datos
+
+volumes:
+  mysql_data:
+
+networks:
+  default:
+    external:
+      name: red_compartida

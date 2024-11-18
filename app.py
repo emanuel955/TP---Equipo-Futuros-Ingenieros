@@ -1,9 +1,10 @@
-from flask import Flask, render_template, url_for, request, jsonify, redirect, flash, session
-import requests
+from flask import Flask, jsonify, request,render_template,url_for,redirect,flash,session
 from mysql.connector import connect, Error
+import requests
+API_URL = 'http://flask_api:8080/api/v1/'
 
 app = Flask(__name__)
-API_URL = 'http://flask_api:8080/api/v1/'
+
 # Configuración para conectar a MySQL
 app.config['MYSQL_HOST'] = 'mysql_db'  # Nombre del servicio MySQL en Docker Compose
 app.config['MYSQL_USER'] = 'flask_user'  # Usuario configurado en docker-compose.yml
@@ -35,13 +36,20 @@ def test_db():
 @app.route('/')
 def index():
     try:
-        response = requests.get(API_URL+'testimonios')
+        response = requests.get(API_URL+'hoteles')
         response.raise_for_status()
-        testimonios = response.json()
+        hoteles = response.json()
+
+        # response = requests.get(API_URL+'testimonios')
+        # response.raise_for_status()
+        # testimonios = response.json()
+        testimonios = []
+
     except requests.exceptions.RequestException as e:
         print (f"Error fetching data: {e}")
+        hoteles = []
         testimonios = []
-    return render_template('index.html', testimonios=testimonios)
+    return render_template('index.html', hoteles=hoteles, testimonios=testimonios)
 
 @app.route('/rooms')
 def rooms():
@@ -62,6 +70,14 @@ def contact():
 @app.route('/reserva')
 def reserva():
     return render_template('reserva.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/registrarse')
+def registrarse():
+    return render_template('registrarse.html')
 
 if __name__ == '__main__':
     app.run(host = '0.0.0.0', debug=True)

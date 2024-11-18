@@ -7,16 +7,25 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="hero-text">
-                        <h1>Sona A Luxury Hotel</h1>
-                        <p>Here are the best hotel booking sites, including recommendations for international
-                            travel and for finding low-priced hotel rooms.</p>
+                        <h1>Hoteles FI</h1>
+                        <p>Conozca nuestros mejores hoteles, incluidas recomendaciones para viajar y encontrar
+                            habitaciones de hotel a bajo precio.</p>
                         <a href="#" class="primary-btn">Discover Now</a>
                     </div>
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
-                        <h3>Booking Your Hotel</h3>
+                        <h3>Reserva tu Hotel</h3>
                         <form action="#">
+                            <div class="select-option">
+                                <label for="guest">Destino:</label>
+                                <select id="guest">
+                                    {{hoteles}}
+                                    {%for Hotel in hoteles%}
+                                    <option value="">{{Hotel['name_hotel']}} </option>
+                                    {%endfor%}
+                                </select>
+                            </div>
                             <div class="check-date">
                                 <label for="date-in">Check In:</label>
                                 <input type="text" class="date-input" id="date-in">
@@ -32,13 +41,6 @@
                                 <select id="guest">
                                     <option value="">2 Adults</option>
                                     <option value="">3 Adults</option>
-                                </select>
-                            </div>
-                            <div class="select-option">
-                                <label for="room">Room:</label>
-                                <select id="room">
-                                    <option value="">1 Room</option>
-                                    <option value="">2 Room</option>
                                 </select>
                             </div>
                             <button type="submit">Check Availability</button>

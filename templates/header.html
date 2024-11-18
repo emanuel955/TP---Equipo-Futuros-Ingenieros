@@ -23,9 +23,8 @@
                                     </ul>
                                 </li>
                                 <li><a href="{{ url_for('about') }}">About Us</a></li>
-                                <li><a href="{{ url_for('contact') }}">Contacto</a></li>
-                                {% if 'user' in session %}
-                                    <li><a href="#">Bienvenido, {{ session['user'] }}!</a></li>
+                                {% if 'usuario' in session %}
+                                    <li><a href="#">Bienvenido, {{ session['usuario'] }}!</a></li>
                                     <li><a href="{{ url_for('logout') }}">Logout</a></li>
                                     {% else %}
                                     <li><a href="{{ url_for('login') }}" style="margin-right: 0px;">Login</a>

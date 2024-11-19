@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: flask_api
+    ports:
+      - "8081:8081"  # Exponer Flask en el puerto 5000
+    volumes:
+      - .:/api  # Monta el directorio actual en el contenedor para el desarrollo
+
+networks:
+  default:
+    external:
+      name: red_compartida

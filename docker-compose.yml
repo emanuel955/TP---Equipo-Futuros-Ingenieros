@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
   web:
@@ -21,6 +21,22 @@ services:
       - "3306:3306"  # Exponer MySQL en el puerto 3306
     volumes:
       - mysql_data:/var/lib/mysql  # Volumen persistente para los datos
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - "8080:80"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_HOST: mysql_db  # Cambiado de 'links' a la red interna
+      MYSQL_DATABASE: flask_database
+      MYSQL_USER: flask_user  # Usuario a utilizar para conectarse desde phpMyAdmin
+      MYSQL_PASSWORD: flask_password  # Contraseña de flask_user
+    volumes:
+      - ./config:/usr/local/etc/phpmyadmin
+    links:
+      - mysql_db:db 
+
 
 volumes:
   mysql_data:

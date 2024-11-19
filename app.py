@@ -1,13 +1,11 @@
 from hashlib import new
 from flask import Flask, render_template, url_for, request, jsonify, redirect, flash, session
 import requests
-# import requests
-from db import models
-from db.consultas.hoteles import Select_hoteles_all
+# from db.consultas.hoteles import Select_hoteles_all
 from mysql.connector import connect, Error
 
 app = Flask(__name__)
-API_URL = 'http://flask_api:8080/api/v1/'
+API_URL = 'http://flask_api:8081/api/v1/'
 # Configuración para conectar a MySQL
 app.config['MYSQL_HOST'] = 'mysql_db'  # Nombre del servicio MySQL en Docker Compose
 app.config['MYSQL_USER'] = 'flask_user'  # Usuario configurado en docker-compose.yml
@@ -50,9 +48,14 @@ def rooms():
 
 @app.route('/hoteles')
 def hoteles():
-    models.Hoteles()
-    response = Select_hoteles_all()
-    return render_template('hoteles.html',response=response)
+    try:
+        response = requests.get(API_URL+'hoteles')
+        response.raise_for_status()
+        hoteles = response.json()
+    except requests.exceptions.RequestException as e:
+        print("eeror {e}")
+        hoteles = []
+    return render_template('hoteles.html',response=hoteles)
 
 @app.route('/about')
 def about():

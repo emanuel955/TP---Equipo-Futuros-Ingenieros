@@ -1,4 +1,4 @@
-from db.models import Hoteles
+from typing import Any
 from sqlalchemy.orm import Session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine

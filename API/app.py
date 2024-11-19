@@ -27,9 +27,11 @@ def hoteles():
     except Exception as e:
         return jsonify({'error_ema': str(e)}),500
 
-    responseb = list(response)
+    for row in response:
+        responseb.append({'id':row[0],'name':row[1]})
+
     print(f"emma_t{responseb}")
-    return jsonify({'data': responseb}),200
+    return jsonify(responseb),200
 
 
 if __name__ == '__main__':

@@ -7,16 +7,25 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="hero-text">
-                        <h1>Sona A Luxury Hotel</h1>
-                        <p>Here are the best hotel booking sites, including recommendations for international
-                            travel and for finding low-priced hotel rooms.</p>
+                        <h1>Hoteles FI</h1>
+                        <p>Conozca nuestros mejores hoteles, incluidas recomendaciones para viajar y encontrar
+                            habitaciones de hotel a bajo precio.</p>
                         <a href="#" class="primary-btn">Discover Now</a>
                     </div>
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
-                        <h3>Booking Your Hotel</h3>
+                        <h3>Reserva tu Hotel</h3>
                         <form action="#">
+                            <div class="select-option">
+                                <label for="guest">Destino:</label>
+                                <select id="guest">
+                                    {{hoteles}}
+                                    {%for Hotel in hoteles%}
+                                    <option value="">{{Hotel['name_hotel']}} </option>
+                                    {%endfor%}
+                                </select>
+                            </div>
                             <div class="check-date">
                                 <label for="date-in">Check In:</label>
                                 <input type="text" class="date-input" id="date-in">
@@ -32,13 +41,6 @@
                                 <select id="guest">
                                     <option value="">2 Adults</option>
                                     <option value="">3 Adults</option>
-                                </select>
-                            </div>
-                            <div class="select-option">
-                                <label for="room">Room:</label>
-                                <select id="room">
-                                    <option value="">1 Room</option>
-                                    <option value="">2 Room</option>
                                 </select>
                             </div>
                             <button type="submit">Check Availability</button>
@@ -296,40 +298,20 @@
             <div class="row">
                 <div class="col-lg-8 offset-lg-2">
                     <div class="testimonial-slider owl-carousel">
-                        <div class="ts-item">
-                            <p>After a construction project took longer than expected, my husband, my daughter and I
-                                needed a place to stay for a few nights. As a Chicago resident, we know a lot about our
-                                city, neighborhood and the types of housing options available and absolutely love our
-                                vacation at Sona Hotel.</p>
-                            <div class="ti-author">
-                                <div class="rating">
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star-half_alt"></i>
+                        {{testimonios}}
+                        {% for testimonio in testimonios %}
+                            <div class="ts-item">
+                                <p>{{ testimonio["resena"] }}</p>
+                                <div class="ti-author">
+                                    <div class="rating">
+                                        {% for i in range(0, testimonio["estrellas"]) %}    
+                                            <i class="icon_star"></i>
+                                        {% endfor %}
+                                    </div>
+                                    <h5> - {{ testimonio["nombre"] }}</h5>
                                 </div>
-                                <h5> - Alexander Vasquez</h5>
                             </div>
-                            <img src="{{ url_for('static', filename='img/testimonial-logo.png') }}" alt="">
-                        </div>
-                        <div class="ts-item">
-                            <p>After a construction project took longer than expected, my husband, my daughter and I
-                                needed a place to stay for a few nights. As a Chicago resident, we know a lot about our
-                                city, neighborhood and the types of housing options available and absolutely love our
-                                vacation at Sona Hotel.</p>
-                            <div class="ti-author">
-                                <div class="rating">
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star-half_alt"></i>
-                                </div>
-                                <h5> - Alexander Vasquez</h5>
-                            </div>
-                            <img src="{{ url_for('static', filename='img/testimonial-logo.png') }}" alt="">
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

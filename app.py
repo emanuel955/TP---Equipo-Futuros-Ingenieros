@@ -57,9 +57,19 @@ def index():
         testimonios = []
     return render_template('index.html', hoteles=hoteles, testimonios=testimonios)
 
-@app.route('/rooms')
+@app.route('/rooms', methods=['GET'])
 def rooms():
-    return render_template('rooms.html')
+    try:
+        response = requests.get(API_URL+'habitaciones')
+        response.raise_for_status()
+        rooms = response.json()
+        if not rooms:
+            return "No se encontraron habitaciones", 404
+    except requests.exceptions.RequestException as e:
+        return f"Error al obtener las habitaciones: {str(e)}", 500
+    
+    return render_template('rooms.html', rooms=rooms)
+
 
 @app.route('/hotel/<int:id>')
 def hotel_details(id):

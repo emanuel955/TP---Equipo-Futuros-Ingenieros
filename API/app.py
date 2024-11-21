@@ -21,10 +21,21 @@ def get_all_hoteles():
         result = querys.all_hoteles()
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    print(result)
     response = []
     for row in result:
-        response.append({'name_hotel': row[0]})
+        response.append({'id':row[0], 'nombre':row[1]})
+    
+    return jsonify(response), 200
+
+@app.route('/api/v1/hoteles/<int:id>', methods=['GET'])
+def get_hotel_by_id(id):
+    try:
+        result = querys.hotel_by_id(id)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    response = []
+    for row in result:
+        response.append({'id':row[0], 'nombre':row[1], 'descripcion':row[2], 'estrellas': row[3], 'servicios': row[4], 'ubicacion':row[5], 'latitud':row[6], 'longitud':row[7]})
     
     return jsonify(response), 200
 

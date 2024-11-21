@@ -3,8 +3,9 @@ from sqlalchemy import create_engine
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
-QUERY_TODOS_LOS_TESTIMONIOS = "SELECT nombre, estrellas, resena FROM testimonios"
-QUERY_TODOS_LOS_HOTELES = "SELECT name_hotel from Hoteles"
+QUERY_TODOS_LOS_TESTIMONIOS = "SELECT nombre, estrellas, resena FROM Testimonios"
+QUERY_TODOS_LOS_HOTELES = "SELECT id, nombre FROM Hoteles"
+QUERY_HOTEL_BY_ID = "SELECT * FROM Hoteles WHERE id = :id"
 QUERY_USUARIO_EXISTENTE = "SELECT mail FROM Usuarios WHERE mail = :mail "
 QUERY_INGRESAR_USUARIO = "INSERT INTO Usuarios(mail,password,nombre,apellido) VALUES (:mail,:password,:nombre,:apellido)"
 QUERY_LOGEAR_USUARIO = "SELECT * FROM Usuarios WHERE mail = :mail AND password = :password"
@@ -17,7 +18,7 @@ def run_query(query, parameters=None):
     with engine.connect() as conn:
         result = conn.execute(text(query), parameters)
         conn.commit()
-    
+    conn.close()
     return result
 
 def all_testimonios():
@@ -25,6 +26,9 @@ def all_testimonios():
 
 def all_hoteles():
     return run_query(QUERY_TODOS_LOS_HOTELES).fetchall()
+
+def hotel_by_id(id):
+    return run_query(QUERY_HOTEL_BY_ID, {'id': id}).fetchall()
 
 def usuario_existente(datos):
     resultado = run_query(QUERY_USUARIO_EXISTENTE,{'mail':datos['mail']}).fetchone()

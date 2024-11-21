@@ -26,7 +26,7 @@ def get_db_connection():
     except Error as e:
         print("Error de conexión:", e)
         return None
-    
+
 @app.route('/test_db')
 def test_db():
     connection = get_db_connection()
@@ -47,10 +47,9 @@ def index():
         response.raise_for_status()
         hoteles = response.json()
 
-        #response = requests.get(API_URL+'testimonios')
-        #response.raise_for_status()
-        #testimonios = response.json()
-        testimonios = []
+        response = requests.get(API_URL+'testimonios')
+        response.raise_for_status()
+        testimonios = response.json()
 
     except requests.exceptions.RequestException as e:
         print (f"Error fetching data: {e}")
@@ -71,6 +70,17 @@ def rooms():
     
     return render_template('rooms.html', rooms=rooms)
 
+
+@app.route('/hotel/<int:id>')
+def hotel_details(id):
+    try:
+        response = requests.get(API_URL+'hoteles/'+str(id))
+        response.raise_for_status()
+        hotel = response.json()
+    except requests.exceptions.RequestException as e:
+        print (f"Error fetching data: {e}")
+        hotel = []
+    return render_template('hotel-details.html', hotel=hotel)
 
 @app.route('/hoteles')
 def hoteles():

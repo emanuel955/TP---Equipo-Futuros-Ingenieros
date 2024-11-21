@@ -8,6 +8,8 @@ QUERY_TODOS_LOS_HOTELES = "SELECT name_hotel from Hoteles"
 QUERY_USUARIO_EXISTENTE = "SELECT mail FROM Usuarios WHERE mail = :mail "
 QUERY_INGRESAR_USUARIO = "INSERT INTO Usuarios(mail,password,nombre,apellido) VALUES (:mail,:password,:nombre,:apellido)"
 QUERY_LOGEAR_USUARIO = "SELECT * FROM Usuarios WHERE mail = :mail AND password = :password"
+QUERY_TODAS_LAS_HABITACIONES = "SELECT id, hotel_id, nombre, camas, precio_diario, imagen, caracteristicas, disponibilidad FROM Habitaciones WHERE disponibilidad = TRUE"
+
 
 engine = create_engine("mysql+mysqlconnector://flask_user:flask_password@mysql_db:3306/flask_database")
 
@@ -42,4 +44,11 @@ def existencia_credenciales(mail,password):
     except Exception as e:
         print(f"Error al intentar iniciar sesion: {e}")
         return None
-    
+
+def todas_habitaciones():
+    try:
+        return run_query(QUERY_TODAS_LAS_HABITACIONES).fetchall()
+    except Exception as e:
+        print(f"Error al obtener las habitaciones: {e}")
+        return None
+

@@ -9,33 +9,43 @@
                     <div class="hero-text">
                         <h1>FIAM Hotels</h1>
                         <p>Here are the best hotel booking sites, including recommendations for international travel and for finding low-priced hotel rooms.</p>
-                        <a href="#" class="primary-btn">Discover Now</a>
+                        <a href="#" class="primary-btn-white">Discover Now</a>
                     </div>
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
                         <h3>Booking Your Hotel</h3>
-                        <form action="#">
+                        <form action="{{ url_for('index') }}" method="post" id="formulario">
                             <div class="select-option">
-                                <label for="guest">Hotel:</label>
-                                <select id="guest">
+                                <label for="hotel">Hotel:</label>
+                                <select id="hotel" name="hotel">
                                     {% for hotel in hoteles %}
-                                        <option value="">{{ hotel['nombre'] }}</option>
-                                    {% endfor %}
+                                        <option value="{{ hotel['id'] }}">{{ hotel['nombre'] }}</option>
+                                    {% endfor %}    
                                 </select>
                             </div>
                             <div class="check-date">
-                                <label for="date-in">Check In:</label>
-                                <input type="text" class="date-input" id="date-in">
                                 <i class="icon_calendar"></i>
+                                <label for="fecha_entrada">Check In:</label>
+                                <input type="date" id="fecha_entrada" name="fecha_entrada" min="" readonly required>
                             </div>
                             <div class="check-date">
-                                <label for="date-out">Check Out:</label>
-                                <input type="text" class="date-input" id="date-out">
                                 <i class="icon_calendar"></i>
+                                <label for="fecha_salida">Check Out:</label>
+                                <input type="date" id="fecha_salida" name="fecha_salida" min=""  readonly required>
                             </div>
+                            {% with messages = get_flashed_messages() %}
+                                {% if messages %}
+                                    <ul style="list-style-type: none;">
+                                        {% for message in messages %}
+                                            <li><span style="color: red;">{{ message }}</span></li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            {% endwith %}
                             <button type="submit">Check Availability</button>
-                        </form>
+                            <p id="error" style="color: red; display: none;"></p>
+                        </form>                        
                     </div>
                 </div>
             </div>
@@ -63,7 +73,7 @@
                             languages.</p>
                         <p class="s-para">So when it comes to booking the perfect hotel, vacation rental, resort,
                             apartment, guest house, or tree house, we’ve got you covered.</p>
-                        <a href="#" class="primary-btn about-btn">Read More</a>
+                        <a href="#" class="primary-btn-black about-btn">Read More</a>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -93,7 +103,7 @@
                             <div class="hp-room-item set-bg" data-setbg="{{ url_for('static', filename='img/room/room-b1.jpg') }}">
                                 <div class="more-details-btn" style="margin-left: 20px; margin-top: 425px;">
                                     <h2 class="hotel-name">{{ hotel['nombre'] }}</h2>
-                                    <a href="{{ url_for('hotel_details', id = hotel['id']) }}" class="primary-btn">More Details</a>
+                                    <a href="{{ url_for('hotel_details', id = hotel['id']) }}" class="primary-btn-white">More Details</a>
                                 </div>
                             </div>
                         </div>
@@ -201,4 +211,34 @@
         </div>
     </section>
     <!-- Testimonial Section End -->
+{% endblock %}
+{% block scripts %}
+    <script>
+        const inputsFecha = document.querySelectorAll('input[type="date"]');
+        const hoy = new Date().toISOString().split("T")[0]
+        inputsFecha.forEach((input) => {
+            input.min = hoy
+            input.addEventListener("keydown", (e) => {
+                e.preventDefault();
+            });
+
+            input.addEventListener("click", () => {
+                input.readOnly = false;
+                input.showPicker();
+                input.readOnly = true;
+            });
+        });
+
+        const formulario = document.getElementById("formulario");
+        const fechaEntrada = document.getElementById("fecha_entrada");
+        const fechaSalida = document.getElementById("fecha_salida");
+
+        fechaEntrada.addEventListener("change", () => {
+            if (fechaEntrada.value) {
+                fechaSalida.min = fechaEntrada.value;
+            } else {
+                fechaSalida.min = hoy;
+            }
+        });
+    </script>
 {% endblock %}

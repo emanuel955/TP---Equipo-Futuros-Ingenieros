@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request,render_template,url_for,redirect,flash,session
 from mysql.connector import connect, Error
+from datetime import datetime
 import requests
 API_URL = 'http://flask_api:8080/api/v1/'
 
@@ -35,13 +36,42 @@ def test_db():
     else:
         return "Error al conectar a la base de datos MySQL"
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    #if 'usuario' not in session:  
-    #    flash('Por favor, inicia sesión para continuar.')
-    #    return redirect(url_for('login'))
-    #Usar para cuando se mande el POST request para ver la disponibilidad de los hoteles
-    #Si no esta el usuario -> al login, de lo contrario se hace la request de POST
+    if request.method == 'POST':
+        # if 'usuario' not in session: 
+        #     flash('Por favor, inicia sesión para continuar.')
+        #     return redirect(url_for('login'))
+        # else:
+        hotel_id = request.form['hotel']
+        fecha_entrada = request.form['fecha_entrada']
+        fecha_salida = request.form['fecha_salida']
+
+        hoy = datetime.today().date()
+        fecha_entrada_date = datetime.strptime(fecha_entrada, '%Y-%m-%d').date()
+        fecha_salida_date = datetime.strptime(fecha_salida, '%Y-%m-%d').date()
+
+
+        if fecha_entrada_date < hoy:
+            flash('La fecha de entrada no puede ser anterior a hoy.')
+            return redirect(url_for('index'))
+
+        # Validar la fecha de salida (no debe ser anterior a la fecha de entrada)
+        if fecha_salida_date < fecha_entrada_date:
+            flash('La fecha de salida no puede ser anterior a la fecha de entrada.')
+            return redirect(url_for('index'))
+
+        try:
+            response = requests.post(API_URL+'habitaciones-disponibles', json={'hotel_id':hotel_id, 'fecha_entrada':fecha_entrada, 'fecha_salida':fecha_salida})
+            response.raise_for_status()
+            habitaciones = response.json()
+            session['fechas']={'fecha_entrada': fecha_entrada, 'fecha_salida': fecha_salida}
+            session['habitaciones']=habitaciones
+            return redirect(url_for('rooms'))
+        except Exception as e:
+            print (f"Error sending data: {e}")
+            return render_template('index.html')
+
     try:
         response = requests.get(API_URL+'hoteles')
         response.raise_for_status()
@@ -51,15 +81,42 @@ def index():
         response.raise_for_status()
         testimonios = response.json()
 
-    except requests.exceptions.RequestException as e:
+    except Exception as e:
         print (f"Error fetching data: {e}")
         hoteles = []
         testimonios = []
     return render_template('index.html', hoteles=hoteles, testimonios=testimonios)
 
-@app.route('/rooms')
+@app.route('/rooms', methods=['GET', 'POST'])
 def rooms():
-    return render_template('rooms.html')
+    # HARDCODEO DE USUARIO -----------------------
+    usuario = {'mail': 'asd@gmail.com', 'id': '1'}
+    session['usuario'] = usuario
+    # --------------------------------------------
+    if request.method == 'POST':
+        usuario = session.get('usuario')
+        id_usuario = usuario['id']
+        fechas = session.get('fechas')
+        fecha_entrada = fechas['fecha_entrada']
+        fecha_salida = fechas['fecha_salida']
+        id_habitacion = request.form.get('id_habitacion')
+        datos = {'id_usuario': id_usuario,
+                 'id_habitacion': id_habitacion,
+                 'fecha_entrada': fecha_entrada,
+                 'fecha_salida': fecha_salida
+                }
+        try:
+            response = requests.post(API_URL+'reservas/ingresar',json=datos)
+            response.raise_for_status()
+            return redirect(url_for('index'))
+        except requests.exceptions.RequestException as e:
+            print (f"Error sending data: {e}")
+    habitaciones = session.get('habitaciones', [])
+        
+    if not habitaciones:
+        return redirect(url_for('index'))
+
+    return render_template('rooms.html', habitaciones=habitaciones)
 
 @app.route('/hotel/<int:id>')
 def hotel_details(id):
@@ -94,7 +151,15 @@ def login():
         try:
             usuario = requests.post(API_URL+'login',json=datos)
             if usuario.status_code == 201:
-                session['usuario'] = mail
+                try:
+                    response = requests.get(API_URL+'usuarios', mail=mail)
+                    response.raise_for_status()
+                    id = response.json()
+                except:
+                    print (f"Error fetching data: {e}")
+                    id = []
+                usuario = {'mail': mail, 'id': id}
+                session['usuario'] = usuario
                 return redirect(url_for('index'))
             else:
                 flash('Correo o contraseña incorrectos.')

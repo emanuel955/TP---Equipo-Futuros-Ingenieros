@@ -8,10 +8,10 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb-text">
-                    <h2>Nuestras Habitaciones</h2>
+                    <h2>Available rooms</h2>
                     <div class="bt-option">
                         <a href="{{ url_for('index') }}">Home</a>
-                        <span>Habitaciones</span>
+                        <span>Rooms</span>
                     </div>
                 </div>
             </div>
@@ -22,26 +22,33 @@
 <section class="rooms-section spad">
     <div class="container">
         <div class="row">
-            {% for room in rooms %}
-            <div class="col-lg-4 col-md-6">
-                <div class="room-item">
-                    <img src="{{ url_for('static', filename=room.image) }}" alt="">
-                    <div class="ri-text">
-                        <h4>{{ room.name }}</h4>
-                        <h3>{{ room.price }}$<span>/Pernight</span></h3>
-                        <table>
-                            <tbody>
-                                <tr><td class="r-o">Size:</td><td>{{ room.size }}</td></tr>
-                                <tr><td class="r-o">Capacity:</td><td>{{ room.capacity }}</td></tr>
-                                <tr><td class="r-o">Bed:</td><td>{{ room.bed }}</td></tr>
-                                <tr><td class="r-o">Services:</td><td>{{ room.services }}</td></tr>
-                            </tbody>
-                        </table>
-                        <a href="{{ url_for('room_details', room_id=room.id) }}" class="primary-btn">More Details</a>
+            {% if 'message' in habitaciones[0] %}
+                <p style="margin-bottom: 20%; font-size: 30px;">{{ habitaciones[0]['message'] }}</p>
+            {% else %}
+                {% for habitacion in habitaciones %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="habitacion-item" style="margin-bottom: 50px;">
+                            <img src="{{ url_for('static', filename='/img/room/room-1.jpg') }}" alt="{{ habitacion['nombre'] }}">
+                            <div class="ri-text">
+                                <h4>{{ habitacion['nombre'] }}</h4>
+                                <h3>{{ habitacion['precio_diario'] }}$<span>/Pernight</span></h3>
+                                <table>
+                                    <tbody>
+                                        <!-- <tr><td class="r-o">Size:</td><td>{{ habitacion.size }}</td></tr>
+                                        <tr><td class="r-o">Capacity:</td><td>{{ habitacion.capacity }}</td></tr> -->
+                                        <tr><td class="r-o">Bed:</td><td>{{ habitacion['camas'] }}</td></tr>
+                                        <tr><td class="r-o">Services:</td><td>{{ habitacion['caracteristicas'] }}</td></tr>
+                                    </tbody>
+                                </table>
+                                <form action="{{ url_for('rooms') }}" method="post">
+                                    <input type="hidden" name="id_habitacion" value="{{ habitacion['id'] }}">
+                                    <button type="submit class="primary-btn-black">Book now</a>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 </section>

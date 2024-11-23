@@ -128,7 +128,7 @@ ul, ol {
 }
 /* buttons */
 
-.primary-btn {
+.primary-btn-white {
 	display: inline-block;
 	font-size: 13px;
 	color: #ffffff;
@@ -136,8 +136,29 @@ ul, ol {
 	letter-spacing: 2px;
 	font-weight: 700;
 	position: relative;
+	transition: transform 0.3s ease;
 }
-.primary-btn:after {
+
+.primary-btn-black {
+	display: inline-block;
+	font-size: 13px;
+	color: #000000;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-weight: 700;
+	position: relative;
+	transition: transform 0.3s ease;
+}
+.primary-btn-white:after {
+	position: absolute;
+	left: 0;
+	bottom: -5px;
+	width: 100%;
+	height: 2px;
+	background: #dfa974;
+	content: "";
+}
+.primary-btn-black:after {
 	position: absolute;
 	left: 0;
 	bottom: -5px;
@@ -513,6 +534,7 @@ ul, ol {
 }
 .hero-text .primary-btn:hover {
 	color: #ffffff;
+	transform: scale(1.1);
 }
 .hero-text h1 {
 	font-size: 80px;
@@ -1161,6 +1183,9 @@ ul, ol {
 /*---------------------
   Room Section
 -----------------------*/
+.primary-btn .booking-btn {
+	color: #000;
+}
 .hotel-name {
 	color: #fff; font-weight: 700;
 	margin-bottom: 50px;
@@ -1233,6 +1258,15 @@ ul, ol {
 
 .more-details-btn .primary-btn:hover{
 	color: #ffffff;
+	transform: scale(1.1);
+}
+.primary-btn-black:hover{
+	color: black;
+	transform: scale(1.1);
+}
+.primary-btn-white:hover{
+	color: white;
+	transform: scale(1.1);
 }
 
 .room-pagination {

@@ -55,9 +55,9 @@ def get_habitaciones_disponibles():
         if not datos:
             return jsonify({'error': 'No se recibieron datos JSON válidos'}), 400
 
-        hotel_id = datos.get('hotel_id')
-        fecha_entrada = datos.get('fecha_entrada')
-        fecha_salida = datos.get('fecha_salida')
+        hotel_id = datos['hotel_id']
+        fecha_entrada = datos['fecha_entrada']
+        fecha_salida = datos['fecha_salida']
 
         if not hotel_id or not fecha_entrada or not fecha_salida:
             return jsonify({'error': 'Faltan parámetros obligatorios'}), 400
@@ -65,8 +65,7 @@ def get_habitaciones_disponibles():
         # Verifica datos en logs (borrar en produccion)
         print(f"Hotel ID: {hotel_id}, Fecha Entrada: {fecha_entrada}, Fecha Salida: {fecha_salida}")
 
-        result = querys.habitaciones_disponibles(hotel_id, fecha_entrada, fecha_salida)
-
+        result = querys.habitaciones_disponibles(datos)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
@@ -82,8 +81,10 @@ def get_habitaciones_disponibles():
     return jsonify(response), 200
 
 @app.route('/api/v1/usuarios', methods=['GET'])
-def get_usuario_by_mail(mail):
+def get_usuario_by_mail():
     try:
+        datos = request.get_json()
+        mail = datos['mail']
         result = querys.usuario_by_mail(mail)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -97,10 +98,31 @@ def get_usuario_by_mail(mail):
 def ingresar_reserva():
     try:
         datos = request.get_json()
-        querys.ingresar_reserva(datos)
+        reserva_existe = querys.reserva_existente(datos)
+
+        if reserva_existe:
+            return '', 400
+        else:
+            try:
+                querys.ingresar_reserva(datos)
+                return '', 201
+            except Exception as e:
+                return jsonify({"Error": str(e)}), 400
+            
     except Exception as e:
         return jsonify({"Error":str(e)}),400
 
+@app.route('/api/v1/reservas/<int:id_usuario>', methods=['GET'])
+def get_reservas_by_id_usuario(id_usuario):
+    try:
+        result = querys.reservas_by_id_usuario(id_usuario)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    response = []
+    for row in result:
+        response.append({'id': row[0], 'id_usuario': row[1], 'id_habitacion': row[2], 'fecha_entrada': row[3], 'fecha_salida': row[4]})
+    
+    return jsonify(response), 200
 
 @app.route('/api/v1/registrarse', methods=['POST'])
 def registrarse():
@@ -115,9 +137,12 @@ def registrarse():
         if usuario_existe:
             return '', 400
         else:
-            respuesta = querys.ingresar_usuario(datos)
-            if respuesta == 201:
-                return '', 201
+            try:
+                respuesta = querys.ingresar_usuario(datos)
+                if respuesta == 201:
+                    return '', 201
+            except Exception as e:
+                return jsonify({"Error": str(e)}), 400
     except Exception as e:
         return jsonify({"Error": str(e)}), 400
 

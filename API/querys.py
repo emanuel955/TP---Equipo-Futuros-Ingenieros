@@ -19,15 +19,14 @@ SELECT
     Habitaciones.precio_diario,
     Habitaciones.imagen
 FROM Habitaciones
-LEFT JOIN Reservas ON Reservas.id = Habitaciones.id
+LEFT JOIN Reservas ON Reservas.id_habitacion = Habitaciones.id
     AND (
-        (Reservas.fecha_entrada <= :fecha_salida AND Reservas.fecha_salida > :fecha_entrada) OR
-        (Reservas.fecha_entrada < :fecha_salida AND Reservas.fecha_salida >= :fecha_entrada) OR
-        (Reservas.fecha_entrada >= :fecha_entrada AND Reservas.fecha_salida <= :fecha_salida)
+        (Reservas.fecha_entrada <= :fecha_salida AND Reservas.fecha_salida > :fecha_entrada)
     )
 WHERE Habitaciones.hotel_id = :hotel_id
-    AND Reservas.id IS NULL;
+    AND Reservas.id_habitacion IS NULL;
 """
+QUERY_RESERVA_EXISTENTE = "SELECT id FROM Reservas WHERE id_usuario = :id_usuario AND id_habitacion = :id_habitacion AND fecha_entrada = :fecha_entrada AND fecha_salida = :fecha_salida"
 QUERY_INGRESAR_RESERVA = "INSERT INTO Reservas(id_usuario, id_habitacion, fecha_entrada, fecha_salida) VALUES (:id_usuario, :id_habitacion, :fecha_entrada, :fecha_salida)"
 
 engine = create_engine("mysql+mysqlconnector://flask_user:flask_password@mysql_db:3306/flask_database")
@@ -48,8 +47,8 @@ def all_hoteles():
 def hotel_by_id(id):
     return run_query(QUERY_HOTEL_BY_ID, {'id': id}).fetchall()
 
-def habitaciones_disponibles(hotel_id, fecha_entrada, fecha_salida):
-    resultado = run_query(QUERY_HABITACIONES_DISPONIBLES, {'hotel_id': hotel_id, 'fecha_entrada': fecha_entrada, 'fecha_salida': fecha_salida}).fetchall()
+def habitaciones_disponibles(datos):
+    resultado = run_query(QUERY_HABITACIONES_DISPONIBLES, datos).fetchall()
     return resultado
     
 def usuario_by_mail(mail):
@@ -73,11 +72,15 @@ def existencia_credenciales(mail,password):
     except Exception as e:
         print(f"Error al intentar iniciar sesion: {e}")
         return None
+    
+def reserva_existente(datos):
+    resultado = run_query(QUERY_RESERVA_EXISTENTE, datos).fetchone()
+    return resultado
 
 def ingresar_reserva(datos):
     try:
         run_query(QUERY_INGRESAR_RESERVA, datos)
         return 201
     except Exception as e:
-        print(f"Error al agregar al usuario: {e}")
+        print(f"Error al agregar reserva: {e}")
         return 400

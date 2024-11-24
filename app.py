@@ -39,38 +39,42 @@ def test_db():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        # if 'usuario' not in session: 
-        #     flash('Por favor, inicia sesión para continuar.')
-        #     return redirect(url_for('login'))
-        # else:
-        hotel_id = request.form['hotel']
-        fecha_entrada = request.form['fecha_entrada']
-        fecha_salida = request.form['fecha_salida']
+        if 'usuario' not in session: 
+            flash('Por favor, inicia sesión para continuar.')
+            return redirect(url_for('login'))
+        else:
+            hotel_id = request.form['hotel']
+            fecha_entrada = request.form['fecha_entrada']
+            fecha_salida = request.form['fecha_salida']
 
-        hoy = datetime.today().date()
-        fecha_entrada_date = datetime.strptime(fecha_entrada, '%Y-%m-%d').date()
-        fecha_salida_date = datetime.strptime(fecha_salida, '%Y-%m-%d').date()
+            hoy = datetime.today().date()
+            fecha_entrada_date = datetime.strptime(fecha_entrada, '%Y-%m-%d').date()
+            fecha_salida_date = datetime.strptime(fecha_salida, '%Y-%m-%d').date()
 
 
-        if fecha_entrada_date < hoy:
-            flash('La fecha de entrada no puede ser anterior a hoy.')
-            return redirect(url_for('index'))
+            if fecha_entrada_date < hoy:
+                flash('La fecha de entrada no puede ser anterior a hoy.')
+                return redirect(url_for('index'))
 
-        # Validar la fecha de salida (no debe ser anterior a la fecha de entrada)
-        if fecha_salida_date < fecha_entrada_date:
-            flash('La fecha de salida no puede ser anterior a la fecha de entrada.')
-            return redirect(url_for('index'))
+            # Validar la fecha de salida (no debe ser anterior a la fecha de entrada)
+            if fecha_salida_date < fecha_entrada_date:
+                flash('La fecha de salida no puede ser anterior a la fecha de entrada.')
+                return redirect(url_for('index'))
 
-        try:
-            response = requests.post(API_URL+'habitaciones-disponibles', json={'hotel_id':hotel_id, 'fecha_entrada':fecha_entrada, 'fecha_salida':fecha_salida})
-            response.raise_for_status()
-            habitaciones = response.json()
-            session['fechas']={'fecha_entrada': fecha_entrada, 'fecha_salida': fecha_salida}
-            session['habitaciones']=habitaciones
-            return redirect(url_for('rooms'))
-        except Exception as e:
-            print (f"Error sending data: {e}")
-            return render_template('index.html')
+            try:
+                datos = {'hotel_id':hotel_id,
+                        'fecha_entrada':fecha_entrada,
+                        'fecha_salida':fecha_salida
+                        }
+                response = requests.post(API_URL+'habitaciones-disponibles', json=datos)
+                response.raise_for_status()
+                habitaciones = response.json()
+                session['fechas']={'fecha_entrada': fecha_entrada, 'fecha_salida': fecha_salida}
+                session['habitaciones']=habitaciones
+                return redirect(url_for('rooms'))
+            except Exception as e:
+                print (f"Error sending data: {e}")
+                return render_template('index.html')
 
     try:
         response = requests.get(API_URL+'hoteles')
@@ -89,32 +93,37 @@ def index():
 
 @app.route('/rooms', methods=['GET', 'POST'])
 def rooms():
-    # HARDCODEO DE USUARIO -----------------------
-    usuario = {'mail': 'asd@gmail.com', 'id': '1'}
-    session['usuario'] = usuario
-    # --------------------------------------------
-    if request.method == 'POST':
-        usuario = session.get('usuario')
-        id_usuario = usuario['id']
-        fechas = session.get('fechas')
-        fecha_entrada = fechas['fecha_entrada']
-        fecha_salida = fechas['fecha_salida']
-        id_habitacion = request.form.get('id_habitacion')
-        datos = {'id_usuario': id_usuario,
-                 'id_habitacion': id_habitacion,
-                 'fecha_entrada': fecha_entrada,
-                 'fecha_salida': fecha_salida
-                }
-        try:
-            response = requests.post(API_URL+'reservas/ingresar',json=datos)
-            response.raise_for_status()
+    if 'usuario' not in session: 
+        flash('Por favor, inicia sesión para continuar.')
+        return redirect(url_for('login'))
+    else:
+        if request.method == 'POST':
+            usuario = session.get('usuario')
+            id_usuario = usuario['id']
+
+            fechas = session.get('fechas')
+            fecha_entrada = fechas['fecha_entrada']
+            fecha_salida = fechas['fecha_salida']
+
+            id_habitacion = request.form.get('id_habitacion')
+            datos = {'id_usuario': id_usuario,
+                    'id_habitacion': id_habitacion,
+                    'fecha_entrada': fecha_entrada,
+                    'fecha_salida': fecha_salida
+                    }
+            try:
+                response = requests.post(API_URL+'reservas/ingresar',json=datos)
+                if response.status_code == 201:
+                    return redirect(url_for('index'))
+                if response.status_code == 400:
+                    flash("The reservation you are trying to make already exists.")
+                    return redirect(url_for('index'))
+            except requests.exceptions.RequestException as e:
+                print (f"Error sending data: {e}")
+        habitaciones = session.get('habitaciones', [])
+            
+        if not habitaciones:
             return redirect(url_for('index'))
-        except requests.exceptions.RequestException as e:
-            print (f"Error sending data: {e}")
-    habitaciones = session.get('habitaciones', [])
-        
-    if not habitaciones:
-        return redirect(url_for('index'))
 
     return render_template('rooms.html', habitaciones=habitaciones)
 
@@ -152,13 +161,13 @@ def login():
             usuario = requests.post(API_URL+'login',json=datos)
             if usuario.status_code == 201:
                 try:
-                    response = requests.get(API_URL+'usuarios', mail=mail)
+                    response = requests.get(API_URL+'usuarios', json={'mail':mail})
                     response.raise_for_status()
                     id = response.json()
-                except:
+                except Exception as e:
                     print (f"Error fetching data: {e}")
                     id = []
-                usuario = {'mail': mail, 'id': id}
+                usuario = {'mail': mail, 'id': id[0]['id']}
                 session['usuario'] = usuario
                 return redirect(url_for('index'))
             else:

@@ -27,7 +27,9 @@ WHERE Habitaciones.hotel_id = :hotel_id
     AND Reservas.id_habitacion IS NULL;
 """
 QUERY_RESERVA_EXISTENTE = "SELECT id FROM Reservas WHERE id_usuario = :id_usuario AND id_habitacion = :id_habitacion AND fecha_entrada = :fecha_entrada AND fecha_salida = :fecha_salida"
-QUERY_INGRESAR_RESERVA = "INSERT INTO Reservas(id_usuario, id_habitacion, fecha_entrada, fecha_salida) VALUES (:id_usuario, :id_habitacion, :fecha_entrada, :fecha_salida)"
+QUERY_INGRESAR_RESERVA = "INSERT INTO Reservas(id_usuario, id_habitacion, fecha_entrada, fecha_salida, precio_diario) VALUES (:id_usuario, :id_habitacion, :fecha_entrada, :fecha_salida, :precio_diario)"
+QUERY_RESERVAS_BY_ID = "SELECT * FROM Reservas WHERE id_usuario = :id_usuario"
+QUERY_BORRAR_RESERVA = "DELETE FROM Reservas WHERE id = :id"
 
 engine = create_engine("mysql+mysqlconnector://flask_user:flask_password@mysql_db:3306/flask_database")
 
@@ -84,3 +86,9 @@ def ingresar_reserva(datos):
     except Exception as e:
         print(f"Error al agregar reserva: {e}")
         return 400
+    
+def reservas_by_id_usuario(id_usuario):
+    return run_query(QUERY_RESERVAS_BY_ID, {'id_usuario': id_usuario}).fetchall()
+
+def delete_reserva(id):
+    return run_query(QUERY_BORRAR_RESERVA, {'id': id})

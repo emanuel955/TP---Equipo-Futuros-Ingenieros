@@ -34,17 +34,16 @@
                                 <label for="fecha_salida">Check Out:</label>
                                 <input type="date" id="fecha_salida" name="fecha_salida" min=""  readonly required>
                             </div>
-                            {% with messages = get_flashed_messages() %}
+                            {% with messages = get_flashed_messages(with_categories=True) %}
                                 {% if messages %}
                                     <ul style="list-style-type: none;">
-                                        {% for message in messages %}
-                                            <li><span style="color: red;">{{ message }}</span></li>
+                                        {% for category, message in messages %}
+                                            <li class="flash-{{ category }}">{{ message }}</li>
                                         {% endfor %}
                                     </ul>
                                 {% endif %}
                             {% endwith %}
                             <button type="submit">Check Availability</button>
-                            <p id="error" style="color: red; display: none;"></p>
                         </form>                        
                     </div>
                 </div>
@@ -103,7 +102,7 @@
                             <div class="hp-room-item set-bg" data-setbg="{{ url_for('static', filename='img/room/room-b1.jpg') }}">
                                 <div class="more-details-btn" style="margin-left: 20px; margin-top: 425px;">
                                     <h2 class="hotel-name">{{ hotel['nombre'] }}</h2>
-                                    <a href="{{ url_for('hotel_details', id = hotel['id']) }}" class="primary-btn-white">More Details</a>
+                                    <a href="{{ url_for('hotel_details', id = hotel['id'], nombre = hotel['nombre']) }}" class="primary-btn-white">More Details</a>
                                 </div>
                             </div>
                         </div>

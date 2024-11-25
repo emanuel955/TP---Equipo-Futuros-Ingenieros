@@ -19,15 +19,6 @@
                     <form action="{{ url_for('registrarse') }}" method="POST">
                         <div class="check-date">
                             <label for="mail">Mail:</label>
-                            {% with messages = get_flashed_messages() %}
-                            {% if messages %}
-                                <ul>
-                                {% for message in messages %}
-                                    <li>{{ message }}</li>
-                                {% endfor %}
-                                </ul>
-                            {% endif %}
-                            {% endwith %}
                             <input type="text" name="mail" id="mail" required value="{{ mail or '' }}">
                             <i class="icon_mail"></i>
                         </div>
@@ -44,7 +35,16 @@
                             <label for="apellido">Surname:</label>
                             <input type="text" name="apellido" id="apellido" required value="{{ apellido or '' }}">
                         </div>
-                        <button type="submit">Register</button>
+                        {% with messages = get_flashed_messages(with_categories=True) %}
+                        {% if messages %}
+                            <ul style="list-style-type: none;">
+                            {% for category, message in messages %}
+                                <li class="flash-{{ category }}">{{ message }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% endwith %}
+                        <button type="submit" style="background-color: #dfa974; color: white;"">Register</button>
                     </form>
                 </div>
             </div>

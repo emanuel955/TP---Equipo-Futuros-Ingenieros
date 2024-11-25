@@ -23,11 +23,13 @@
     <div class="container">
         <div class="row">
             {% if 'message' in habitaciones[0] %}
-                <p style="margin-bottom: 20%; font-size: 30px;">{{ habitaciones[0]['message'] }}</p>
+                <p style="font-size: 30px;">{{ habitaciones[0]['message'] }}</p>
+                <div style="height: 30vh;">
+                </div>
             {% else %}
                 {% for habitacion in habitaciones %}
                     <div class="col-lg-4 col-md-6">
-                        <div class="habitacion-item" style="margin-bottom: 50px;">
+                        <div class="room-item" style="margin-bottom: 50px;">
                             <img src="{{ url_for('static', filename='/img/room/room-1.jpg') }}" alt="{{ habitacion['nombre'] }}">
                             <div class="ri-text">
                                 <h4>{{ habitacion['nombre'] }}</h4>
@@ -42,7 +44,8 @@
                                 </table>
                                 <form action="{{ url_for('rooms') }}" method="post">
                                     <input type="hidden" name="id_habitacion" value="{{ habitacion['id'] }}">
-                                    <button type="submit class="primary-btn-black">Book now</a>
+                                    <input type="hidden" name="precio_diario" value="{{ habitacion['precio_diario'] }}">
+                                    <button type="submit">BOOK NOW</a>
                                 </form>
                             </div>
                         </div>

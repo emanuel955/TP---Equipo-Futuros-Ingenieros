@@ -34,9 +34,7 @@
 
 html {
 	scroll-behavior: smooth;
-  }
-  
-
+}
 html, body {
 	height: 100%;
 	font-family: "Cabin", sans-serif;
@@ -88,6 +86,12 @@ a:hover, a:focus {
 ul, ol {
 	padding: 0;
 	margin: 0;
+}
+.flash-success {
+	color:green
+}
+.flash-error {
+	color: red
 }
 /*---------------------
   Helper CSS
@@ -888,7 +892,6 @@ ul, ol {
 /*---------------------
   Footer Section
 -----------------------*/
-
 .footer-section {
 	background: #222736;
 }
@@ -1223,7 +1226,6 @@ ul, ol {
 }
 .room-item .ri-text {
 	border: 1px solid #ebebeb;
-	border-top: none;
 	padding: 24px 24px 30px 28px;
 }
 .room-item .ri-text h4 {

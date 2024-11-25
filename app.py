@@ -40,7 +40,7 @@ def test_db():
 def index():
     if request.method == 'POST':
         if 'usuario' not in session: 
-            flash('Por favor, inicia sesión para continuar.')
+            flash('Please log in to continue.', 'error')
             return redirect(url_for('login'))
         else:
             hotel_id = request.form['hotel']
@@ -53,12 +53,12 @@ def index():
 
 
             if fecha_entrada_date < hoy:
-                flash('La fecha de entrada no puede ser anterior a hoy.')
+                flash("The check-in date cannot be earlier than today.", 'error')
                 return redirect(url_for('index'))
 
             # Validar la fecha de salida (no debe ser anterior a la fecha de entrada)
             if fecha_salida_date < fecha_entrada_date:
-                flash('La fecha de salida no puede ser anterior a la fecha de entrada.')
+                flash("The check-out date cannot be earlier than the check-in date.", 'error')
                 return redirect(url_for('index'))
 
             try:
@@ -94,7 +94,7 @@ def index():
 @app.route('/rooms', methods=['GET', 'POST'])
 def rooms():
     if 'usuario' not in session: 
-        flash('Por favor, inicia sesión para continuar.')
+        flash('Please log in to continue.', 'error')
         return redirect(url_for('login'))
     else:
         if request.method == 'POST':
@@ -106,17 +106,20 @@ def rooms():
             fecha_salida = fechas['fecha_salida']
 
             id_habitacion = request.form.get('id_habitacion')
+            precio_diario = request.form.get('precio_diario')
             datos = {'id_usuario': id_usuario,
                     'id_habitacion': id_habitacion,
                     'fecha_entrada': fecha_entrada,
-                    'fecha_salida': fecha_salida
+                    'fecha_salida': fecha_salida,
+                    'precio_diario': precio_diario
                     }
             try:
                 response = requests.post(API_URL+'reservas/ingresar',json=datos)
                 if response.status_code == 201:
+                    flash("Reservation made successfully", 'success')
                     return redirect(url_for('index'))
                 if response.status_code == 400:
-                    flash("The reservation you are trying to make already exists.")
+                    flash("The reservation you are trying to make already exists.", 'error')
                     return redirect(url_for('index'))
             except requests.exceptions.RequestException as e:
                 print (f"Error sending data: {e}")
@@ -127,9 +130,10 @@ def rooms():
 
     return render_template('rooms.html', habitaciones=habitaciones)
 
-@app.route('/hotel/<int:id>')
-def hotel_details(id):
+@app.route('/hotel/<string:nombre>')
+def hotel_details(nombre):
     try:
+        id = request.args.get('id')
         response = requests.get(API_URL+'hoteles/'+str(id))
         response.raise_for_status()
         hotel = response.json()
@@ -146,9 +150,32 @@ def hoteles():
 def about():
     return render_template('about.html')
 
-@app.route('/reserva')
-def reserva():
-    return render_template('reserva.html')
+@app.route('/reservas', methods=['GET','POST'])
+def reservas():
+    usuario = session.get('usuario')
+    id_usuario = usuario['id']
+    if request.method == 'POST':
+        id = request.form.get('id')
+        datos = {'id': id}
+        try:
+            response = requests.delete(API_URL+'reservas/borrar', json=datos)
+            response.raise_for_status()
+            if response.status_code == 200:
+                flash("Reservation successfully canceled.", 'success')
+            else:
+                flash("Could not cancel the reservation.", 'error')
+        except Exception as e:
+            flash(f"Error canceling the reservation: {e}", 'error')
+        redirect(url_for('reservas'))
+
+    try:
+        response = requests.get(API_URL+'reservas/'+str(id_usuario))
+        response.raise_for_status()
+        reservas = response.json()
+    except Exception as e:
+        print(f"Error fetching data: {e}")
+        reservas = []
+    return render_template('reservas.html', reservas=reservas)
 
 @app.route('/login',methods=['GET','POST'])
 def login():
@@ -171,9 +198,9 @@ def login():
                 session['usuario'] = usuario
                 return redirect(url_for('index'))
             else:
-                flash('Correo o contraseña incorrectos.')
+                flash("Incorrect email or password.", 'error')
         except Exception as e:
-            flash(f'Error de conexión al servidor: {e}')
+            flash(f"Server connection error. {e}", 'error')
 
     return render_template('login.html')
 
@@ -194,7 +221,7 @@ def registrarse():
             if response.status_code == 201:
                 return redirect(url_for('login'))
             if response.status_code == 400:
-                flash("El email que ingreso ya esta registrado. Ingrese uno diferente.")
+                flash("The email you entered is already registered. Please enter a different one.", 'error')
                 return render_template('registro.html',mail = mail,nombre = nombre,apellido = apellido)
 
         except requests.exceptions.RequestException as e:

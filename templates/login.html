@@ -21,15 +21,6 @@
                         <form action="{{ url_for('login') }}" method = 'POST'>
                             <div class="check-date">
                                 <label for="date-in">Mail:</label>
-                                {% with messages = get_flashed_messages() %}
-                                {% if messages %}
-                                <ul>
-                                {% for message in messages %}
-                                    <li>{{ message }}</li>
-                                {% endfor %}
-                                </ul>
-                                {% endif %}
-                                {% endwith %}
                                 <input type="text" name="mail" id="mail" required name ="mail">
                                 <i class="icon_mail"></i>
                             </div>
@@ -38,9 +29,18 @@
                                 <input type="password" name="password" id="password" required name ="password">
                                 <i class="icon_eye"></i>
                             </div>
+                            {% with messages = get_flashed_messages(with_categories=True) %}
+                            {% if messages %}
+                            <ul style="list-style-type: none;">
+                            {% for category, message in messages %}
+                                <li class="flash-{{ category }}">{{ message }}</li>
+                            {% endfor %}
+                            </ul>
+                            {% endif %}
+                            {% endwith %}
                             <button type="submit">login</button>
                             <div class="d-flex align-items-center justify-content-center ">
-                                <button type="submit"><a href="{{ url_for('registrarse') }}">Registrarse</a></button>
+                                <button type="submit" style="background-color: #dfa974;"><a href="{{ url_for('registrarse') }}" style="color: white; display: block; height: 100%; padding: 9px;">Register</a></button>
                             </div>
                         </form>
                     </div>

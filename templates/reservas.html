@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Reservation details{% endblock %}
+
+{% block content %}
+    <div class="wrapper">
+        <!-- Breadcrumb Section Begin -->
+        <div class="breadcrumb-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breadcrumb-text">
+                            <h2>Your Reservations</h2>
+                            <div class="bt-option">
+                                <a href="{{ url_for('index') }}">Home</a>
+                                <span>Your reservations</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Breadcrumb Section End -->
+
+        <!-- Room Details Section Begin -->
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        <div style="text-align: center;">
+            <ul style="list-style-type: none;">
+                {% for category, message in messages %}
+                    <p class="flash-{{ category }}" style="font-size: 30px; margin-bottom: 70px;">{{ message }}</p>
+                {% endfor %}
+            </ul>
+        </div">
+        {% endif %}
+        {% endwith %}
+            <section class="rooms-section spad">
+                <div class="container">
+                    <div class="row">
+                    {% if 'message' in reservas[0] %}
+                        <p style="font-size: 30px;">{{ reservas[0]['message'] }}</p>
+                        <div style="height: 30vh;">
+                    {% else %}
+                        {% for reserva in reservas %}
+                            <div class="col-lg-4 col-md-6">
+                                <div class="room-item">
+                                    <div class="ri-text">
+                                        <h4>Reservation ID: {{ reserva['id'] }}</h4>
+                                        <h3>{{ reserva['precio'] }}$<span></span></h3>
+                                        <table>
+                                            <tbody>
+                                                <tr><td class="r-o">Room ID:</td><td>{{ reserva['id_habitacion'] }}</td></tr>
+                                                <tr><td class="r-o">Check-in:</td><td>{{ reserva['fecha_entrada'] }}</td></tr>
+                                                <tr><td class="r-o">Check-out:</td><td>{{ reserva['fecha_salida'] }}</td></tr>
+                                            </tbody>
+                                        </table>
+                                        <form action="{{ url_for('reservas') }}" method="post">
+                                            <input type="hidden" name="id" value="{{ reserva['id'] }}">
+                                            <button type="submit">CANCEL RESERVATION</a>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+        <!-- Room Details Section End -->
+    </div>
+
+{% endblock %}

@@ -30,6 +30,8 @@ QUERY_RESERVA_EXISTENTE = "SELECT id FROM Reservas WHERE id_usuario = :id_usuari
 QUERY_INGRESAR_RESERVA = "INSERT INTO Reservas(id_usuario, id_habitacion, fecha_entrada, fecha_salida, precio_diario) VALUES (:id_usuario, :id_habitacion, :fecha_entrada, :fecha_salida, :precio_diario)"
 QUERY_RESERVAS_BY_ID = "SELECT * FROM Reservas WHERE id_usuario = :id_usuario"
 QUERY_BORRAR_RESERVA = "DELETE FROM Reservas WHERE id = :id"
+QUERY_INGRESAR_RESERVA_SERVICIOS = "INSERT INTO Reservas_Servicios(id_reserva) VALUES (:id_reserva)"
+QUERY_LAST_ID = "SELECT LAST_INSERT_ID()"
 
 engine = create_engine("mysql+mysqlconnector://flask_user:flask_password@mysql_db:3306/flask_database")
 
@@ -37,6 +39,10 @@ def run_query(query, parameters=None):
     with engine.connect() as conn:
         result = conn.execute(text(query), parameters)
         conn.commit()
+        if query == QUERY_INGRESAR_RESERVA:
+            ultimo_id = conn.execute(text(QUERY_LAST_ID)).scalar()
+            conn.close()
+            return ultimo_id
     conn.close()
     return result
 
@@ -81,7 +87,15 @@ def reserva_existente(datos):
 
 def ingresar_reserva(datos):
     try:
-        run_query(QUERY_INGRESAR_RESERVA, datos)
+        reserva_id = run_query(QUERY_INGRESAR_RESERVA, datos)
+        return reserva_id
+    except Exception as e:
+        print(f"Error al agregar reserva: {e}")
+        return None
+
+def ingresar_reserva_servicios(datos):
+    try:
+        run_query(QUERY_INGRESAR_RESERVA_SERVICIOS, datos)
         return 201
     except Exception as e:
         print(f"Error al agregar reserva: {e}")

@@ -105,8 +105,14 @@ def ingresar_reserva():
             return '', 400
         else:
             try:
-                querys.ingresar_reserva(datos)
-                return '', 201
+                id_reserva = querys.ingresar_reserva(datos)
+                if id_reserva:
+                    datos = {'id_reserva': id_reserva}
+                    print(datos)
+                    querys.ingresar_reserva_servicios(datos)
+                    return '', 201
+                else:
+                    return '', 400
             except Exception as e:
                 return jsonify({"Error": str(e)}), 400
             

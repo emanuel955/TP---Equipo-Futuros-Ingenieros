@@ -1,5 +1,6 @@
 import querys as querys
 from flask import Flask, jsonify, request, render_template,flash
+from datetime import datetime
 import logging
 import sys
 
@@ -116,13 +117,31 @@ def ingresar_reserva():
 def get_reservas_by_id_usuario(id_usuario):
     try:
         result = querys.reservas_by_id_usuario(id_usuario)
+        if not result:
+            return jsonify({'Error': 'No se encontraron reservas para este usuario'}), 400
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     response = []
+    formato = "%Y-%m-%d"
     for row in result:
-        response.append({'id': row[0], 'id_usuario': row[1], 'id_habitacion': row[2], 'fecha_entrada': row[3], 'fecha_salida': row[4]})
+        fecha_entrada = row[3].strftime("%Y-%m-%d")
+        fecha_salida = row[4].strftime("%Y-%m-%d")
+        entrada = datetime.strptime(fecha_entrada, formato)
+        salida = datetime.strptime(fecha_salida, formato)
+        cantidad_dias = (salida - entrada).days
+        response.append({'id': row[0], 'id_usuario': row[1], 'id_habitacion': row[2], 'fecha_entrada': fecha_entrada, 'fecha_salida': fecha_salida, 'precio': row[5]*cantidad_dias})
     
     return jsonify(response), 200
+
+@app.route('/api/v1/reservas/borrar', methods=['DELETE'])
+def borrar_reserva():
+    try:
+        datos = request.get_json()
+        id = datos['id']
+        result = querys.delete_reserva(id)
+        return '', 200
+    except Exception as e:
+        return jsonify({"Error": str(e)}), 500
 
 @app.route('/api/v1/registrarse', methods=['POST'])
 def registrarse():

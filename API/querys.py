@@ -30,8 +30,27 @@ QUERY_RESERVA_EXISTENTE = "SELECT id FROM Reservas WHERE id_usuario = :id_usuari
 QUERY_INGRESAR_RESERVA = "INSERT INTO Reservas(id_usuario, id_habitacion, fecha_entrada, fecha_salida, precio_diario) VALUES (:id_usuario, :id_habitacion, :fecha_entrada, :fecha_salida, :precio_diario)"
 QUERY_RESERVAS_BY_ID = "SELECT * FROM Reservas WHERE id_usuario = :id_usuario"
 QUERY_BORRAR_RESERVA = "DELETE FROM Reservas WHERE id = :id"
+QUERY_CHECK_SERVICIO = "SELECT :servicio FROM Reservas_Servicios WHERE id_reserva = :id_reserva"
+QUERY_UPDATE_SERVICIO = "UPDATE Reservas_Servicios SET :servicio = 1 WHERE id_reserva = :id_reserva"
+QUERY_VALIDAR_RESERVA = """
+    SELECT r.id, u.apellido
+    FROM Reservas r
+    INNER JOIN Usuarios u ON r.id_usuario = u.id
+    WHERE r.id = :nro_reserva AND u.apellido = :apellido
+"""
 
 engine = create_engine("mysql+mysqlconnector://flask_user:flask_password@mysql_db:3306/flask_database")
+
+def check_servicio(id_reserva, servicio):
+    query = QUERY_CHECK_SERVICIO.replace(":servicio", servicio)
+    return run_query(query, {'id_reserva': id_reserva}).fetchone()
+
+def contratar_servicio(id_reserva, servicio):
+    query = QUERY_UPDATE_SERVICIO.replace(":servicio", servicio)
+    return run_query(query, {'id_reserva': id_reserva})
+
+def validar_reserva(nro_reserva, apellido):
+    return run_query(QUERY_VALIDAR_RESERVA, {'nro_reserva': nro_reserva, 'apellido': apellido}).fetchone()
 
 def run_query(query, parameters=None):
     with engine.connect() as conn:

@@ -34,7 +34,7 @@ QUERY_INGRESAR_RESERVA_SERVICIOS = "INSERT INTO Reservas_Servicios(id_reserva) V
 QUERY_LAST_ID = "SELECT LAST_INSERT_ID()"
 QUERY_SERVICIOS_POR_RESERVA = "SELECT masaje, rio, desayuno FROM Reservas_Servicios WHERE id_reserva = :id_reserva"
 
-engine = create_engine("mysql+mysqlconnector://root:BbiRlotkloMAGIUDbxnkuJzoVBPqzhtY@mysql.railway.internal:3306/railway")
+engine = create_engine("mysql+mysqlconnector://flask_user:flask_password@mysql_db:3306/flask_database")
 
 def run_query(query, parameters=None):
     with engine.connect() as conn:

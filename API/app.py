@@ -1,5 +1,6 @@
 import querys as querys
 from flask import Flask, jsonify, request, render_template,flash
+from mysql.connector import connect, Error
 from datetime import datetime
 import logging
 import sys
@@ -12,6 +13,12 @@ logging.basicConfig(
 )
 
 app = Flask(__name__)
+
+# Configuración para conectar a MySQL
+app.config['MYSQL_HOST'] = 'mysql_db'
+app.config['MYSQL_USER'] = 'flask_user'
+app.config['MYSQL_PASSWORD'] = 'flask_password'
+app.config['MYSQL_DATABASE'] = 'flask_database'
 
 @app.route('/api/v1/contratar_servicio', methods=['POST'])
 def contratar_servicio():

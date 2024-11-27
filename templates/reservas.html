@@ -37,10 +37,12 @@
             <section class="rooms-section spad">
                 <div class="container">
                     <div class="row">
-                    {% if 'message' in reservas[0] %}
-                        <p style="font-size: 30px;">{{ reservas[0]['message'] }}</p>
-                        <div style="height: 30vh;">
-                    {% else %}
+                        {% if 'message' in reservas[0] %}
+                            <div style="text-align: center; width: 100%;">
+                                <p style="font-size: 30px;">{{ reservas[0]['message'] }}</p>
+                            </div>
+                            <div style="height: 30vh;"></div>
+                        {% else %}
                         {% for reserva in reservas %}
                             <div class="col-lg-4 col-md-6">
                                 <div class="room-item">
@@ -52,6 +54,13 @@
                                                 <tr><td class="r-o">Room ID:</td><td>{{ reserva['id_habitacion'] }}</td></tr>
                                                 <tr><td class="r-o">Check-in:</td><td>{{ reserva['fecha_entrada'] }}</td></tr>
                                                 <tr><td class="r-o">Check-out:</td><td>{{ reserva['fecha_salida'] }}</td></tr>
+                                                <tr><td class="r-o">Servicios:</td>
+                                                    <td style="text-transform: capitalize;">
+                                                        {% for servicio in reserva['servicios'] %}
+                                                            {{ servicio }} <br>
+                                                        {% endfor %}
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                         <form action="{{ url_for('reservas') }}" method="post">

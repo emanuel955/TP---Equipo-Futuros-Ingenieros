@@ -29,6 +29,9 @@ WHERE Habitaciones.hotel_id = :hotel_id
 QUERY_RESERVA_EXISTENTE = "SELECT id FROM Reservas WHERE id_usuario = :id_usuario AND id_habitacion = :id_habitacion AND fecha_entrada = :fecha_entrada AND fecha_salida = :fecha_salida"
 QUERY_INGRESAR_RESERVA = "INSERT INTO Reservas(id_usuario, id_habitacion, fecha_entrada, fecha_salida, precio_diario) VALUES (:id_usuario, :id_habitacion, :fecha_entrada, :fecha_salida, :precio_diario)"
 QUERY_RESERVAS_BY_ID = "SELECT * FROM Reservas WHERE id_usuario = :id_usuario"
+QUERY_INGRESAR_RESERVA_SERVICIOS = "INSERT INTO Reservas_Servicios(id_reserva) VALUES (:id_reserva)"
+QUERY_LAST_ID = "SELECT LAST_INSERT_ID()"
+QUERY_SERVICIOS_POR_RESERVA = "SELECT masaje, rio, desayuno FROM Reservas_Servicios WHERE id_reserva = :id_reserva"
 QUERY_BORRAR_RESERVA = "DELETE FROM Reservas WHERE id = :id"
 QUERY_CHECK_SERVICIO = "SELECT :servicio FROM Reservas_Servicios WHERE id_reserva = :id_reserva"
 QUERY_UPDATE_SERVICIO = "UPDATE Reservas_Servicios SET :servicio = 1 WHERE id_reserva = :id_reserva"
@@ -56,6 +59,10 @@ def run_query(query, parameters=None):
     with engine.connect() as conn:
         result = conn.execute(text(query), parameters)
         conn.commit()
+        if query == QUERY_INGRESAR_RESERVA:
+            ultimo_id = conn.execute(text(QUERY_LAST_ID)).scalar()
+            conn.close()
+            return ultimo_id
     conn.close()
     return result
 
@@ -100,7 +107,15 @@ def reserva_existente(datos):
 
 def ingresar_reserva(datos):
     try:
-        run_query(QUERY_INGRESAR_RESERVA, datos)
+        reserva_id = run_query(QUERY_INGRESAR_RESERVA, datos)
+        return reserva_id
+    except Exception as e:
+        print(f"Error al agregar reserva: {e}")
+        return None
+
+def ingresar_reserva_servicios(datos):
+    try:
+        run_query(QUERY_INGRESAR_RESERVA_SERVICIOS, datos)
         return 201
     except Exception as e:
         print(f"Error al agregar reserva: {e}")
@@ -111,3 +126,6 @@ def reservas_by_id_usuario(id_usuario):
 
 def delete_reserva(id):
     return run_query(QUERY_BORRAR_RESERVA, {'id': id})
+
+def servicios_by_id_reserva(id_reserva):
+    return run_query(QUERY_SERVICIOS_POR_RESERVA, {'id_reserva': id_reserva}).fetchone()

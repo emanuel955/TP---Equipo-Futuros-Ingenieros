@@ -1,0 +1,203 @@
+ScreenManager:
+    id: screen_manager
+
+    # Pantalla inicial
+    MDScreen:
+        name: "home"
+
+        canvas.before:
+            Color:
+                rgba: 0.9, 0.95, 1, 1  # Fondo azul claro
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        MDBoxLayout:
+            orientation: "vertical"
+            spacing: dp(15)
+            padding: dp(20)
+
+            FloatLayout:
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint: None, None
+                    size: dp(200), self.minimum_height
+                    pos_hint: {"center_x": 0.5, "y": 0.5}
+                    spacing: dp(30)
+                    padding: [0, dp(20), 0, 0]
+
+                    AsyncImage:
+                        source: "img/icon.png"
+                        size_hint_y: None
+                        height: dp(100)
+
+                    MDLabel:
+                        text: "¡Bienvenido!"
+                        halign: "center"
+                        font_style: "H5"
+                        theme_text_color: "Custom"
+                        text_color: 0.2, 0.3, 0.5, 1
+
+            MDTextField:
+                id: apellido
+                hint_text: "Apellido"
+                size_hint_x: None
+                width: dp(200)
+                pos_hint: {"center_x": 0.5}
+                line_color_focus: 0.1, 0.5, 1, 1
+                radius: [10]
+
+            MDTextField:
+                id: nro_reserva
+                hint_text: "Nro. de Reserva"
+                size_hint_x: None
+                width: dp(200)
+                pos_hint: {"center_x": 0.5}
+                line_color_focus: 0.1, 0.5, 1, 1
+                radius: [10]
+
+            MDBoxLayout:
+                size_hint_y: None
+                height: dp(60)
+                width: dp(200)
+                pos_hint: {"center_x": 0.5}
+                md_bg_color: 1, 1, 1, 1
+                radius: [30]
+                MDLabel:
+                    text: "Validar"
+                    halign: "center"
+                    valign: "center"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.5, 1, 1
+                    bold: True
+                    on_touch_down:
+                        if self.collide_point(*args[1].pos): app.validar_reserva(nro_reserva.text, apellido.text)
+
+    # Pantalla de servicios
+    MDScreen:
+        name: "services"
+
+        canvas.before:
+            Color:
+                rgba: 0.9, 0.95, 1, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        MDBoxLayout:
+            orientation: "vertical"
+            spacing: dp(10)
+            padding: dp(20)
+
+            MDLabel:
+                text: "Seleccione un servicio a contratar"
+                halign: "center"
+                font_style: "H6"
+                theme_text_color: "Custom"
+                text_color: 0.1, 0.1, 0.1, 1
+
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: [dp(20), 0, dp(20), dp(20)]
+
+                MDList:
+                    OneLineListItem:
+                        text: "Masajes"
+                        on_release:
+                            app.update_details("Masajes")
+                            screen_manager.current = "details"
+
+                    OneLineListItem:
+                        text: "Desayuno"
+                        on_release:
+                            app.update_details("Desayuno")
+                            screen_manager.current = "details"
+
+                    OneLineListItem:
+                        text: "Excursión por el río"
+                        on_release:
+                            app.update_details("Rio")
+                            screen_manager.current = "details"
+
+    # Pantalla de detalles del servicio
+    MDScreen:
+        name: "details"
+
+        canvas.before:
+            Color:
+                rgba: 0.9, 0.95, 1, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        MDBoxLayout:
+            orientation: "vertical"
+            spacing: dp(10)
+            padding: dp(20)
+            size_hint_y: None
+            height: self.minimum_height  # Se ajusta automáticamente según el contenido
+            pos_hint: {"top": 1}  # Pega el layout a la parte superior
+
+            # Encabezado con el título
+            MDBoxLayout:
+                size_hint_y: None
+                height: dp(100)
+                md_bg_color: 1, 1, 1, 1
+                radius: [20]
+                MDLabel:
+                    text: "Servicio"
+                    halign: "center"
+                    valign: "center"
+                    font_style: "H6"
+                    theme_text_color: "Custom"
+                    text_color: 0.1, 0.1, 0.1, 1
+
+            # Imagen del servicio
+            AsyncImage:
+                id: details_image
+                source: ""
+                size_hint_y: None
+                height: dp(200)
+
+            # Precio y detalles
+            MDBoxLayout:
+                orientation: "horizontal"
+                spacing: dp(10)
+                size_hint_y: None
+                height: dp(60)
+
+                MDIconButton:
+                    icon: "cash"
+                    theme_text_color: "Custom"
+                    text_color: 0, 0.5, 1, 1
+
+                MDLabel:
+                    id: details_price
+                    text: ""
+                    halign: "left"
+                    theme_text_color: "Custom"
+                    text_color: 0, 0.5, 1, 1
+
+            MDBoxLayout:
+                size_hint_y: None
+                height: dp(60)
+                pos_hint: {"center_x": 0.5}
+                md_bg_color: 0, 0.5, 1, 1
+                radius: [30]
+                canvas.before:
+                    Color:
+                        rgba: 0, 0.5, 1, 1
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                        radius: [30]
+
+                MDLabel:
+                    text: "Contratar"
+                    halign: "center"
+                    valign: "center"
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+                    bold: True
+                    on_touch_down:
+                        if self.collide_point(*args[1].pos): app.contratar_servicio()

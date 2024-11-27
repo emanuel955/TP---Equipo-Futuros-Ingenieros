@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Sona Hoteles{% endblock %}
+{% block title %}FIAM Hotels{% endblock %}
 {% block content %}
     <!-- Hero Section Begin -->
     <section class="hero-section">
@@ -7,44 +7,44 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="hero-text">
-                        <h1>Hoteles FI</h1>
-                        <p>Conozca nuestros mejores hoteles, incluidas recomendaciones para viajar y encontrar
-                            habitaciones de hotel a bajo precio.</p>
-                        <a href="#" class="primary-btn">Discover Now</a>
+                        <h1>FIAM Hotels</h1>
+                        <p>Here are the best hotel booking sites, including recommendations for international travel and for finding low-priced hotel rooms.</p>
+                        <a href="#" class="primary-btn-white">Discover Now</a>
                     </div>
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
-                        <h3>Reserva tu Hotel</h3>
-                        <form action="#">
+                        <h3>Booking Your Hotel</h3>
+                        <form action="{{ url_for('index') }}" method="post" id="formulario">
                             <div class="select-option">
-                                <label for="guest">Destino:</label>
-                                <select id="guest">
-                                    {{hoteles}}
-                                    {%for Hotel in hoteles%}
-                                    <option value="">{{Hotel['name_hotel']}} </option>
-                                    {%endfor%}
+                                <label for="hotel">Hotel:</label>
+                                <select id="hotel" name="hotel">
+                                    {% for hotel in hoteles %}
+                                        <option value="{{ hotel['id'] }}">{{ hotel['nombre'] }}</option>
+                                    {% endfor %}    
                                 </select>
                             </div>
                             <div class="check-date">
-                                <label for="date-in">Check In:</label>
-                                <input type="text" class="date-input" id="date-in">
                                 <i class="icon_calendar"></i>
+                                <label for="fecha_entrada">Check In:</label>
+                                <input type="date" id="fecha_entrada" name="fecha_entrada" min="" readonly required>
                             </div>
                             <div class="check-date">
-                                <label for="date-out">Check Out:</label>
-                                <input type="text" class="date-input" id="date-out">
                                 <i class="icon_calendar"></i>
+                                <label for="fecha_salida">Check Out:</label>
+                                <input type="date" id="fecha_salida" name="fecha_salida" min=""  readonly required>
                             </div>
-                            <div class="select-option">
-                                <label for="guest">Guests:</label>
-                                <select id="guest">
-                                    <option value="">2 Adults</option>
-                                    <option value="">3 Adults</option>
-                                </select>
-                            </div>
+                            {% with messages = get_flashed_messages(with_categories=True) %}
+                                {% if messages %}
+                                    <ul style="list-style-type: none;">
+                                        {% for category, message in messages %}
+                                            <li class="flash-{{ category }}">{{ message }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            {% endwith %}
                             <button type="submit">Check Availability</button>
-                        </form>
+                        </form>                        
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                             languages.</p>
                         <p class="s-para">So when it comes to booking the perfect hotel, vacation rental, resort,
                             apartment, guest house, or tree house, we’ve got you covered.</p>
-                        <a href="#" class="primary-btn about-btn">Read More</a>
+                        <a href="#" class="primary-btn-black about-btn">Read More</a>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -91,6 +91,27 @@
         </div>
     </section>
     <!-- About Us Section End -->
+         
+    <!-- Home Room Section Begin -->
+    <section class="hp-room-section" id="hotel-section">
+        <div class="container-fluid">
+            <div class="hp-room-items">
+                <div class="row">
+                    {% for hotel in hoteles %}
+                        <div class="col-lg-3 col-md-6" style="margin-bottom: 10px;">
+                            <div class="hp-room-item set-bg" data-setbg="{{ url_for('static', filename='img/room/room-b1.jpg') }}">
+                                <div class="more-details-btn" style="margin-left: 20px; margin-top: 425px;">
+                                    <h2 class="hotel-name">{{ hotel['nombre'] }}</h2>
+                                    <a href="{{ url_for('hotel_details', id = hotel['id'], nombre = hotel['nombre']) }}" class="primary-btn-white">More Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Home Room Section End -->
 
     <!-- Services Section End -->
     <section class="services-section spad">
@@ -156,134 +177,6 @@
         </div>
     </section>
     <!-- Services Section End -->
-
-    <!-- Home Room Section Begin -->
-    <section class="hp-room-section">
-        <div class="container-fluid">
-            <div class="hp-room-items">
-                <div class="row">
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="{{ url_for('static', filename='img/room/room-b1.jpg') }}">
-                            <div class="hr-text">
-                                <h3>Double Room</h3>
-                                <h2>199$<span>/Pernight</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 5</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="#" class="primary-btn">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="{{ url_for('static', filename='img/room/room-b2.jpg') }}">
-                            <div class="hr-text">
-                                <h3>Premium King Room</h3>
-                                <h2>159$<span>/Pernight</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 5</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="#" class="primary-btn">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="{{ url_for('static', filename='img/room/room-b3.jpg') }}">
-                            <div class="hr-text">
-                                <h3>Deluxe Room</h3>
-                                <h2>198$<span>/Pernight</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 5</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="#" class="primary-btn">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="{{ url_for('static', filename='img/room/room-b4.jpg') }}">
-                            <div class="hr-text">
-                                <h3>Family Room</h3>
-                                <h2>299$<span>/Pernight</span></h2>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="r-o">Size:</td>
-                                            <td>30 ft</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Capacity:</td>
-                                            <td>Max persion 5</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Bed:</td>
-                                            <td>King Beds</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="r-o">Services:</td>
-                                            <td>Wifi, Television, Bathroom,...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="#" class="primary-btn">More Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Home Room Section End -->
-
     <!-- Testimonial Section Begin -->
     <section class="testimonial-section spad">
         <div class="container">
@@ -298,17 +191,16 @@
             <div class="row">
                 <div class="col-lg-8 offset-lg-2">
                     <div class="testimonial-slider owl-carousel">
-                        {{testimonios}}
                         {% for testimonio in testimonios %}
                             <div class="ts-item">
-                                <p>{{ testimonio["resena"] }}</p>
+                                <p>{{ testimonio['resena'] }}</p>
                                 <div class="ti-author">
                                     <div class="rating">
-                                        {% for i in range(0, testimonio["estrellas"]) %}    
+                                        {% for i in range(0, testimonio['estrellas']) %}    
                                             <i class="icon_star"></i>
                                         {% endfor %}
                                     </div>
-                                    <h5> - {{ testimonio["nombre"] }}</h5>
+                                    <h5> - {{ testimonio['nombre'] }}</h5>
                                 </div>
                             </div>
                         {% endfor %}
@@ -318,4 +210,34 @@
         </div>
     </section>
     <!-- Testimonial Section End -->
+{% endblock %}
+{% block scripts %}
+    <script>
+        const inputsFecha = document.querySelectorAll('input[type="date"]');
+        const hoy = new Date().toISOString().split("T")[0]
+        inputsFecha.forEach((input) => {
+            input.min = hoy
+            input.addEventListener("keydown", (e) => {
+                e.preventDefault();
+            });
+
+            input.addEventListener("click", () => {
+                input.readOnly = false;
+                input.showPicker();
+                input.readOnly = true;
+            });
+        });
+
+        const formulario = document.getElementById("formulario");
+        const fechaEntrada = document.getElementById("fecha_entrada");
+        const fechaSalida = document.getElementById("fecha_salida");
+
+        fechaEntrada.addEventListener("change", () => {
+            if (fechaEntrada.value) {
+                fechaSalida.min = fechaEntrada.value;
+            } else {
+                fechaSalida.min = hoy;
+            }
+        });
+    </script>
 {% endblock %}

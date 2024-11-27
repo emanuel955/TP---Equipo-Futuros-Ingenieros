@@ -32,6 +32,9 @@
 /* Template default CSS
 /*----------------------------------------*/
 
+html {
+	scroll-behavior: smooth;
+}
 html, body {
 	height: 100%;
 	font-family: "Cabin", sans-serif;
@@ -79,11 +82,16 @@ input:focus, select:focus, button:focus, textarea:focus {
 a:hover, a:focus {
 	text-decoration: none;
 	outline: none;
-	color: #000;
 }
 ul, ol {
 	padding: 0;
 	margin: 0;
+}
+.flash-success {
+	color:green
+}
+.flash-error {
+	color: red
 }
 /*---------------------
   Helper CSS
@@ -124,7 +132,7 @@ ul, ol {
 }
 /* buttons */
 
-.primary-btn {
+.primary-btn-white {
 	display: inline-block;
 	font-size: 13px;
 	color: #ffffff;
@@ -132,8 +140,29 @@ ul, ol {
 	letter-spacing: 2px;
 	font-weight: 700;
 	position: relative;
+	transition: transform 0.3s ease;
 }
-.primary-btn:after {
+
+.primary-btn-black {
+	display: inline-block;
+	font-size: 13px;
+	color: #000000;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-weight: 700;
+	position: relative;
+	transition: transform 0.3s ease;
+}
+.primary-btn-white:after {
+	position: absolute;
+	left: 0;
+	bottom: -5px;
+	width: 100%;
+	height: 2px;
+	background: #dfa974;
+	content: "";
+}
+.primary-btn-black:after {
 	position: absolute;
 	left: 0;
 	bottom: -5px;
@@ -507,6 +536,10 @@ ul, ol {
 .hero-text {
 	padding-top: 145px;
 }
+.hero-text .primary-btn:hover {
+	color: #ffffff;
+	transform: scale(1.1);
+}
 .hero-text h1 {
 	font-size: 80px;
 	line-height: 90px;
@@ -672,8 +705,8 @@ ul, ol {
 
 .services-section {
 	padding-bottom: 60px;
-	border-top: 1px solid #e5e5e5;
 }
+
 .services-section .section-title {
 	margin-bottom: 36px;
 }
@@ -859,7 +892,6 @@ ul, ol {
 /*---------------------
   Footer Section
 -----------------------*/
-
 .footer-section {
 	background: #222736;
 }
@@ -1154,6 +1186,33 @@ ul, ol {
 /*---------------------
   Room Section
 -----------------------*/
+.primary-btn .booking-btn {
+	color: #000;
+}
+.hotel-name {
+	color: #fff; font-weight: 700;
+	margin-bottom: 50px;
+	font-family: Lora;
+	line-height: 1.2;
+}
+
+.hotel-description {
+	background-color: #222736;
+	text-align: center;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.hotel-description ul {
+	color: #fff;
+	list-style-type: disc;
+	list-style-position: inside;
+}
+
+.hotel-description ul li {
+	padding: 10px;
+	font-size: large;
+}
 
 .rooms-section {
 	padding-top: 0;
@@ -1167,7 +1226,6 @@ ul, ol {
 }
 .room-item .ri-text {
 	border: 1px solid #ebebeb;
-	border-top: none;
 	padding: 24px 24px 30px 28px;
 }
 .room-item .ri-text h4 {
@@ -1197,8 +1255,22 @@ ul, ol {
 	width: 125px;
 }
 .room-item .ri-text .primary-btn {
-	color: #19191a;
+	color: #ffffff;
 }
+
+.more-details-btn .primary-btn:hover{
+	color: #ffffff;
+	transform: scale(1.1);
+}
+.primary-btn-black:hover{
+	color: black;
+	transform: scale(1.1);
+}
+.primary-btn-white:hover{
+	color: white;
+	transform: scale(1.1);
+}
+
 .room-pagination {
 	text-align: center;
 	padding-top: 20px;
@@ -1279,14 +1351,22 @@ ul, ol {
 .room-details-item .rd-text table {
 	margin-bottom: 32px;
 }
+.room-details-item .rd-text table tbody tr {
+	border-bottom: 1px solid #ccc;
+}
+.room-details-item .rd-text table tbody tr:last-child {
+	border-bottom: none;
+}
 .room-details-item .rd-text table tbody tr td {
-	font-size: 16px;
+	font-size: 20px;
 	color: #19191a;
 	line-height: 36px;
 }
 .room-details-item .rd-text table tbody tr td.r-o {
 	width: 120px;
 	color: #707079;
+	vertical-align: top;
+	font-size: 20px
 }
 .room-details-item .rd-text p {
 	color: #707079;

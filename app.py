@@ -8,34 +8,6 @@ API_URL = 'http://flask_api:8080/api/v1/'
 app = Flask(__name__)
 app.secret_key = "clave_ultra_secreta"
 
-# Configuración para conectar a MySQL
-app.config['MYSQL_HOST'] = 'mysql_db'  # Nombre del servicio MySQL en Docker Compose
-app.config['MYSQL_USER'] = 'flask_user'  # Usuario configurado en docker-compose.yml
-app.config['MYSQL_PASSWORD'] = 'flask_password'  # Contraseña del usuario de MySQL
-app.config['MYSQL_DATABASE'] = 'flask_database'  # Base de datos que usará la aplicación
-
-# Conexión a la base de datos
-def get_db_connection():
-    try:
-        connection = connect(
-            host=app.config['MYSQL_HOST'],
-            user=app.config['MYSQL_USER'],
-            password=app.config['MYSQL_PASSWORD'],
-            database=app.config['MYSQL_DATABASE']
-        )
-        return connection
-    except Error as e:
-        print("Error de conexión:", e)
-        return None
-
-@app.route('/test_db')
-def test_db():
-    connection = get_db_connection()
-    if connection:
-        return "Conexión a la base de datos MySQL exitosa"
-    else:
-        return "Error al conectar a la base de datos MySQL"
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':

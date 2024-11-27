@@ -5,11 +5,31 @@ services:
     build: .
     container_name: flask_api
     ports:
-      - "8080:8080"  # Exponer Flask en el puerto 8080
+      - "8080:8080"  # Expose API on port 8080
     volumes:
-      - .:/api  # Monta el directorio actual en el contenedor para el desarrollo
+      - .:/api  # Mount current directory to container for development
+    networks:
+      - shared_network
+
+  mysql_db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password  # Root password
+      MYSQL_DATABASE: flask_database  # Database name
+      MYSQL_USER: flask_user  # User
+      MYSQL_PASSWORD: flask_password  # User password
+    ports:
+      - "3306:3306"  # Expose MySQL on port 3306
+    volumes:
+      - mysql_data:/var/lib/mysql  # Persistent volume for data
+    networks:
+      - shared_network
+
+volumes:
+  mysql_data:
 
 networks:
-  default:
+  shared_network:
     external:
       name: red_compartida

@@ -13,6 +13,37 @@ logging.basicConfig(
 
 app = Flask(__name__)
 
+@app.route('/api/v1/contratar_servicio', methods=['POST'])
+def contratar_servicio():
+    try:
+        datos = request.get_json()
+        id_reserva = datos['id_reserva']
+        servicio = datos['servicio']
+
+        resultado = querys.check_servicio(id_reserva, servicio)
+        if resultado and resultado[0] == 1:
+            return jsonify({'status': 'error', 'message': f'El servicio {servicio} ya fue contratado.'}), 409
+
+        querys.contratar_servicio(id_reserva, servicio)
+        return jsonify({'status': 'success', 'message': f'Servicio {servicio} contratado con éxito.'}), 200
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@app.route('/api/v1/validar_reserva', methods=['POST'])
+def validar_reserva():
+    try:
+        datos = request.get_json()
+        nro_reserva = datos['nro_reserva']
+        apellido = datos['apellido']
+
+        resultado = querys.validar_reserva(nro_reserva, apellido)
+        if resultado:
+            return jsonify({'status': 'success', 'message': 'Reserva encontrada'}), 200
+        else:
+            return jsonify({'status': 'error', 'message': 'Reserva no encontrada'}), 404
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 @app.route('/api/v1/testimonios', methods=['GET'])
 def get_all_testimonios():
     try:

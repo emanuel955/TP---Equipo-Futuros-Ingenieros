@@ -19,7 +19,7 @@ class MovilApp(MDApp):
         return Builder.load_file("movil.kv")
 
     def validar_reserva(self, nro_reserva, apellido):
-        url = "http://localhost:8080/api/v1/validar_reserva"
+        url = "http://186.129.182.168:8080/api/v1/validar_reserva"
         payload = {"nro_reserva": nro_reserva, "apellido": apellido}
         try:
             response = requests.post(url, json=payload)
@@ -42,7 +42,7 @@ class MovilApp(MDApp):
 
         
     def contratar_servicio(self):
-        url = "http://localhost:8080/api/v1/contratar_servicio"
+        url = "http://186.129.182.168:8080/api/v1/contratar_servicio"
         payload = {
             "id_reserva": self.root.ids.nro_reserva.text,
             "servicio": self.selected_service.lower()

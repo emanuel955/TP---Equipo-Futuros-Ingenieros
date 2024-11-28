@@ -31,7 +31,7 @@
                             </div>
                             {% with messages = get_flashed_messages(with_categories=True) %}
                             {% if messages %}
-                            <ul style="list-style-type: none;">
+                            <ul class="flash-messages">
                             {% for category, message in messages %}
                                 <li class="flash-{{ category }}">{{ message }}</li>
                             {% endfor %}
@@ -40,7 +40,7 @@
                             {% endwith %}
                             <button type="submit">login</button>
                             <div class="d-flex align-items-center justify-content-center ">
-                                <button type="submit" style="background-color: #dfa974;"><a href="{{ url_for('registrarse') }}" style="color: white; display: block; height: 100%; padding: 9px;">Register</a></button>
+                                <button type="submit" class="register-btn"><a href="{{ url_for('registrarse') }}" class="register-link">Register</a></button>
                             </div>
                         </form>
                     </div>

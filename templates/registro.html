@@ -37,14 +37,14 @@
                         </div>
                         {% with messages = get_flashed_messages(with_categories=True) %}
                         {% if messages %}
-                            <ul style="list-style-type: none;">
+                            <ul class="flash-messages">
                             {% for category, message in messages %}
                                 <li class="flash-{{ category }}">{{ message }}</li>
                             {% endfor %}
                             </ul>
                         {% endif %}
                         {% endwith %}
-                        <button type="submit" style="background-color: #dfa974; color: white;"">Register</button>
+                        <button type="submit" class="register-btn">Register</button>
                     </form>
                 </div>
             </div>

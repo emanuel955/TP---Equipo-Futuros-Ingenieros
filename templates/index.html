@@ -36,7 +36,7 @@
                             </div>
                             {% with messages = get_flashed_messages(with_categories=True) %}
                                 {% if messages %}
-                                    <ul style="list-style-type: none;">
+                                    <ul class="flash-messages">
                                         {% for category, message in messages %}
                                             <li class="flash-{{ category }}">{{ message }}</li>
                                         {% endfor %}
@@ -98,9 +98,9 @@
             <div class="hp-room-items">
                 <div class="row">
                     {% for hotel in hoteles %}
-                        <div class="col-lg-3 col-md-6" style="margin-bottom: 10px;">
+                        <div class="col-lg-3 col-md-6" style="margin-bottom: 15px;">
                             <div class="hp-room-item set-bg" data-setbg="{{ url_for('static', filename='img/room/room-b1.jpg') }}">
-                                <div class="more-details-btn" style="margin-left: 20px; margin-top: 425px;">
+                                <div class="more-details-btn more-details-hotels">
                                     <h2 class="hotel-name">{{ hotel['nombre'] }}</h2>
                                     <a href="{{ url_for('hotel_details', id = hotel['id'], nombre = hotel['nombre']) }}" class="primary-btn-white">More Details</a>
                                 </div>
@@ -196,7 +196,10 @@
 
         fechaEntrada.addEventListener("change", () => {
             if (fechaEntrada.value) {
-                fechaSalida.min = fechaEntrada.value;
+                const entradaDate = new Date(fechaEntrada.value);
+                const manana = new Date(entradaDate);
+                manana.setDate(entradaDate.getDate() + 1); 
+                fechaSalida.min = manana.toISOString().split("T")[0];
             } else {
                 fechaSalida.min = hoy;
             }

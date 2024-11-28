@@ -23,14 +23,14 @@
     <div class="container">
         <div class="row">
             {% if 'message' in habitaciones[0] %}
-            <div style="text-align: center; width: 100%;">
-                <p style="font-size: 30px;">{{ habitaciones[0]['message'] }}</p>
+            <div class="container-msg">
+                <p class="msg">{{ habitaciones[0]['message'] }}</p>
             </div>
-            <div style="height: 30vh;">
+            <div class="empty-div">
             {% else %}
                 {% for habitacion in habitaciones %}
                     <div class="col-lg-4 col-md-6">
-                        <div class="room-item" style="margin-bottom: 50px;">
+                        <div class="room-item">
                             <img src="{{ url_for('static', filename='/img/room/room-1.jpg') }}" alt="{{ habitacion['nombre'] }}">
                             <div class="ri-text">
                                 <h4>{{ habitacion['nombre'] }}</h4>

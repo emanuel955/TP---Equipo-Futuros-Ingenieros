@@ -32,6 +32,10 @@ def index():
             if fecha_salida_date < fecha_entrada_date:
                 flash("The check-out date cannot be earlier than the check-in date.", 'error')
                 return redirect(url_for('index'))
+            
+            if fecha_salida_date == fecha_entrada_date:
+                flash("The check-out date cannot be the same as check-in date", 'error')
+                return redirect(url_for('index'))
 
             try:
                 datos = {'hotel_id':hotel_id,

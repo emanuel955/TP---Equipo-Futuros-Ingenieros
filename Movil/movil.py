@@ -42,10 +42,23 @@ class MovilApp(MDApp):
 
         
     def contratar_servicio(self):
+        
+        service_ids = {
+            "Masajes": 1,
+            "Desayuno": 2,
+            "Rio": 3
+        }
+
+        id_servicio = service_ids.get(self.selected_service, None)
+        
+        if id_servicio is None:
+            self.mostrar_dialogo("Error", "El servicio seleccionado no es válido.")
+            return
+
         url = "http://186.129.182.168:8080/api/v1/contratar_servicio"
         payload = {
             "id_reserva": self.root.ids.nro_reserva.text,
-            "servicio": self.selected_service.lower()
+            "id_servicio": id_servicio
         }
         try:
             response = requests.post(url, json=payload)

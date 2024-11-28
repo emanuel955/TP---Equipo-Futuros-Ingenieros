@@ -2,6 +2,7 @@ from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivy.properties import StringProperty
 from kivy.config import Config
+from kivy.base import EventLoop
 import requests
 
 Config.set('graphics', 'width', '400')
@@ -16,8 +17,19 @@ class MovilApp(MDApp):
         self.theme_cls.primary_palette = "Blue"
         self.theme_cls.primary_hue = "200"
         self.theme_cls.accent_palette = "Blue"
-        return Builder.load_file("movil.kv")
 
+        EventLoop.window.bind(on_keyboard=self.on_back_button)
+
+        return Builder.load_file("movil.kv")
+    
+    def on_back_button(self, window, key, *args):
+        if key == 27:
+            screen_manager = self.root.ids.screen_manager
+            if screen_manager.current != "home":
+                screen_manager.current = screen_manager.previous()
+                return True
+            return False
+        
     def validar_reserva(self, nro_reserva, apellido):
         url = "http://186.129.182.168:8080/api/v1/validar_reserva"
         payload = {"nro_reserva": nro_reserva, "apellido": apellido}
@@ -44,9 +56,9 @@ class MovilApp(MDApp):
     def contratar_servicio(self):
         
         service_ids = {
-            "Masajes": 1,
+            "wifi": 1,
             "Desayuno": 2,
-            "Rio": 3
+            "Limpieza": 3
         }
 
         id_servicio = service_ids.get(self.selected_service, None)
@@ -85,9 +97,9 @@ class MovilApp(MDApp):
     def update_details(self, service_name):
         self.selected_service = service_name
         details = {
-            "Masajes": {"image": "img/masajes.png", "price": "$13.000"},
+            "Wifi": {"image": "img/wifi.png", "price": "$13.000"},
             "Desayuno": {"image": "img/desayuno.png", "price": "$3.000"},
-            "Rio": {"image": "img/rio.png", "price": "$10.000"}
+            "Limpieza": {"image": "img/limpieza.png", "price": "$10.000"}
         }
         service_details = details.get(service_name, {"image": "", "price": ""})
         self.root.ids.details_image.source = service_details["image"]

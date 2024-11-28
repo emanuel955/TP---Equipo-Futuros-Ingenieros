@@ -32,6 +32,10 @@ def index():
             if fecha_salida_date < fecha_entrada_date:
                 flash("The check-out date cannot be earlier than the check-in date.", 'error')
                 return redirect(url_for('index'))
+            
+            if fecha_salida_date == fecha_entrada_date:
+                flash("The check-out date cannot be the same as check-in date", 'error')
+                return redirect(url_for('index'))
 
             try:
                 datos = {'hotel_id':hotel_id,
@@ -57,11 +61,17 @@ def index():
         response.raise_for_status()
         testimonios = response.json()
 
+        response = requests.get(API_URL+'servicios')
+        response.raise_for_status()
+        servicios = response.json()
+
     except Exception as e:
         print (f"Error fetching data: {e}")
         hoteles = []
         testimonios = []
-    return render_template('index.html', hoteles=hoteles, testimonios=testimonios)
+        servicios = []
+
+    return render_template('index.html', hoteles=hoteles, testimonios=testimonios, servicios=servicios)
 
 @app.route('/rooms', methods=['GET', 'POST'])
 def rooms():
@@ -109,18 +119,27 @@ def hotel_details(nombre):
         response = requests.get(API_URL+'hoteles/'+str(id))
         response.raise_for_status()
         hotel = response.json()
+
+        response = requests.get(API_URL+'servicios')
+        response.raise_for_status()
+        servicios = response.json()
     except requests.exceptions.RequestException as e:
         print (f"Error fetching data: {e}")
         hotel = []
-    return render_template('hotel-details.html', hotel=hotel)
+        servicios = []
 
-@app.route('/hoteles')
-def hoteles():
-    return render_template('hoteles.html')
+    return render_template('hotel-details.html', hotel=hotel, servicios=servicios)
 
 @app.route('/about')
 def about():
-    return render_template('about.html')
+    try:    
+        response = requests.get(API_URL+'servicios')
+        response.raise_for_status()
+        servicios = response.json()
+    except Exception as e:
+        print (f"Error fetching data: {e}")
+        servicios = []
+    return render_template('about.html', servicios=servicios)
 
 @app.route('/reservas', methods=['GET','POST'])
 def reservas():
@@ -147,6 +166,7 @@ def reservas():
     except Exception as e:
         print(f"Error fetching data: {e}")
         reservas = []
+        
     return render_template('reservas.html', reservas=reservas)
 
 @app.route('/login',methods=['GET','POST'])
@@ -204,6 +224,10 @@ def registrarse():
 def logout():
     session.pop('usuario', None) 
     return redirect(url_for('login'))
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 if __name__ == '__main__':
     app.run(host = '0.0.0.0', debug=True)

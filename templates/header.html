@@ -9,10 +9,10 @@
             <li><a href="#hotel-section">Hotels</a></li>
             <li><a href="{{ url_for('about') }}">About Us</a></li>
             {% if 'usuario' in session %}
-            <li><a href="{{ url_for('reservas') }}" style="margin-top: 70px;">My Reservations</a></li>
+            <li><a href="{{ url_for('reservas') }}" class="my-reservations-mobile">My Reservations</a></li>
             <li><a href="{{ url_for('logout') }}">Logout</a></li>
             {% else %}
-            <li><a href="{{ url_for('login') }}" style="margin-right: 0px;">Login</a>
+            <li><a href="{{ url_for('login') }}" class="login">Login</a>
                 <ul class="dropdown">
                     <li><a href="{{ url_for('registrarse') }}">Register</a></li>
             {% endif %}
@@ -41,15 +41,15 @@
                                 <li><a href="#hotel-section">Hoteles</a></li>
                                 <li><a href="{{ url_for('about') }}">About Us</a></li>
                                 {% if 'usuario' in session %}
-                                    <li><a href="{{ url_for('reservas') }}" style="margin-left: 70px;">My Reservations</a></li>
-                                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                                    <li><a href="{{ url_for('reservas') }}" class="my-reservations">My Reservations</a></li>
+                                    <li><a href="{{ url_for('logout') }}" class="login">Logout</a></li>
                                     {% else %}
-                                    <li><a href="{{ url_for('login') }}" style="margin-right: 0px;">Login</a>
+                                    <li><a href="{{ url_for('login') }}" class="login">Login</a>
                                         <ul class="dropdown">
                                             <li><a href="{{ url_for('registrarse') }}">Register</a></li>
+                                        </ul>
+                                    </li>
                                 {% endif %}
-                                    </ul>
-                                </li>
                             </ul>
                         </nav>
                     </div>

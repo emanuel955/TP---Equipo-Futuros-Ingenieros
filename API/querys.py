@@ -4,7 +4,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
 QUERY_TODOS_LOS_TESTIMONIOS = "SELECT nombre, estrellas, resena FROM Testimonios"
-QUERY_TODOS_LOS_HOTELES = "SELECT id, nombre FROM Hoteles"
+QUERY_TODOS_LOS_HOTELES = "SELECT id, nombre, imagen FROM Hoteles"
 QUERY_HOTEL_BY_ID = "SELECT * FROM Hoteles WHERE id = :id"
 QUERY_USUARIO_BY_MAIL = "SELECT id FROM Usuarios WHERE mail = :mail"
 QUERY_USUARIO_EXISTENTE = "SELECT mail FROM Usuarios WHERE mail = :mail "
@@ -31,10 +31,12 @@ QUERY_INGRESAR_RESERVA = "INSERT INTO Reservas(id_usuario, id_habitacion, fecha_
 QUERY_RESERVAS_BY_ID = "SELECT * FROM Reservas WHERE id_usuario = :id_usuario"
 QUERY_INGRESAR_RESERVA_SERVICIOS = "INSERT INTO Reservas_Servicios(id_reserva) VALUES (:id_reserva)"
 QUERY_LAST_ID = "SELECT LAST_INSERT_ID()"
-QUERY_SERVICIOS_POR_RESERVA = "SELECT masaje, rio, desayuno FROM Reservas_Servicios WHERE id_reserva = :id_reserva"
+QUERY_SERVICIOS_BY_ID_RESERVA = "SELECT id_servicio FROM Reservas_Servicios WHERE id_reserva = :id_reserva"
 QUERY_BORRAR_RESERVA = "DELETE FROM Reservas WHERE id = :id"
-QUERY_CHECK_SERVICIO = "SELECT :servicio FROM Reservas_Servicios WHERE id_reserva = :id_reserva"
-QUERY_UPDATE_SERVICIO = "UPDATE Reservas_Servicios SET :servicio = 1 WHERE id_reserva = :id_reserva"
+QUERY_TODOS_LOS_SERVICIOS = "SELECT nombre, descripcion, imagen, imagen_grande FROM Servicios"
+QUERY_SERVICIO_BY_ID = "SELECT nombre FROM Servicios WHERE id = :id"
+QUERY_CHECK_SERVICIO = "SELECT :servicio FROM Reservas_Servicios WHERE id_reserva = :id_reserva" # Modificar
+QUERY_UPDATE_SERVICIO = "UPDATE Reservas_Servicios SET :servicio = 1 WHERE id_reserva = :id_reserva" # Modificar
 QUERY_VALIDAR_RESERVA = """
     SELECT r.id, u.apellido
     FROM Reservas r
@@ -127,5 +129,11 @@ def reservas_by_id_usuario(id_usuario):
 def delete_reserva(id):
     return run_query(QUERY_BORRAR_RESERVA, {'id': id})
 
-def servicios_by_id_reserva(id_reserva):
-    return run_query(QUERY_SERVICIOS_POR_RESERVA, {'id_reserva': id_reserva}).fetchone()
+def reservas_servicios_by_id_reserva(id_reserva):
+    return run_query(QUERY_SERVICIOS_BY_ID_RESERVA, {'id_reserva': id_reserva}).fetchall()
+
+def all_servicios():
+    return run_query(QUERY_TODOS_LOS_SERVICIOS).fetchall()
+
+def servicio_by_id(id):
+    return run_query(QUERY_SERVICIO_BY_ID, {'id': id}).fetchone()

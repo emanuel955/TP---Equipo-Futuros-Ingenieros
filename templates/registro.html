@@ -8,9 +8,8 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="hero-text">
-                    <h1>Sona A Luxury Hotel</h1>
-                    <p>Hotel description here.</p>
-                    <a href="#" class="primary-btn-white">Discover Now</a>
+                    <h1>FIAM Hotels</h1>
+                    <p>Discover the pinnacle of luxury with our hotel chain, where elegance meets impeccable service. Perfect for global travelers seeking unforgettable stays in opulent destinations.</p>
                 </div>
             </div>
             <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
@@ -37,14 +36,14 @@
                         </div>
                         {% with messages = get_flashed_messages(with_categories=True) %}
                         {% if messages %}
-                            <ul style="list-style-type: none;">
+                            <ul class="flash-messages">
                             {% for category, message in messages %}
                                 <li class="flash-{{ category }}">{{ message }}</li>
                             {% endfor %}
                             </ul>
                         {% endif %}
                         {% endwith %}
-                        <button type="submit" style="background-color: #dfa974; color: white;"">Register</button>
+                        <button type="submit" class="register-btn">Register</button>
                     </form>
                 </div>
             </div>

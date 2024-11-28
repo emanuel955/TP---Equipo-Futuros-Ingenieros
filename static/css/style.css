@@ -87,11 +87,31 @@ ul, ol {
 	padding: 0;
 	margin: 0;
 }
+.flash-messages {
+	list-style-type: none;
+}
+.flash-msg-reservas {
+	font-size: 30px;
+	margin-bottom: 70px;
+}
 .flash-success {
 	color:green
 }
 .flash-error {
 	color: red
+}
+.msg {
+	font-size: 30px;
+}
+.services {
+	text-transform: capitalize;
+}
+.container-msg {
+	text-align: center;
+	width: 100%;
+}
+.empty-div{
+	height: 30vh;
 }
 /*---------------------
   Helper CSS
@@ -293,7 +313,28 @@ ul, ol {
 /*---------------------
   Header
 -----------------------*/
-
+.register-btn {
+	background-color: #dfa974 !important;
+	color: white !important;
+}
+.register-link {
+	color: white;
+	display: block;
+	height: 100%;
+	padding: 9px;
+}
+.register-link:hover {
+	color: white;
+}
+.login {
+	margin-right: 0px !important;
+}
+.my-reservations {
+	margin-left: 70px;
+}
+.my-reservations-mobile {
+	margin-top: 70px !important;
+}
 .header-section.header-normal .menu-item {
 	-webkit-box-shadow: 0px 12px 15px rgba(36, 11, 12, 0.05);
 	box-shadow: 0px 12px 15px rgba(36, 11, 12, 0.05);
@@ -754,7 +795,10 @@ ul, ol {
 /*------------------------
   Home Page Room Section 
 -------------------------*/
-
+.more-details-hotels {
+	margin-left: 20px;
+	margin-top: 425px;
+}
 .hp-room-items {
 	margin-left: -15px;
 	margin-right: -15px;
@@ -1310,11 +1354,13 @@ ul, ol {
 }
 .room-details-item .rd-text .rd-title {
 	overflow: hidden;
-	margin-bottom: 8px;
+	margin-bottom: 18px;
 }
 .room-details-item .rd-text .rd-title h3 {
 	color: #19191a;
 	float: left;
+	font-size: 50px;
+	padding-top: 100px;
 }
 .room-details-item .rd-text .rd-title .rdt-right {
 	float: right;
@@ -1370,6 +1416,7 @@ ul, ol {
 }
 .room-details-item .rd-text p {
 	color: #707079;
+	padding-bottom: 60px;
 }
 .room-details-item .rd-text p.f-para {
 	margin-bottom: 22px;

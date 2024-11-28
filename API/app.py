@@ -2,15 +2,6 @@ import querys as querys
 from flask import Flask, jsonify, request, render_template,flash
 from mysql.connector import connect, Error
 from datetime import datetime
-import logging
-import sys
-
-# IMPRIMIR LOGS EN DOCKER (borrar en produccion)
-logging.basicConfig(
-    stream=sys.stdout,
-    level=logging.DEBUG,
-    format='%(asctime)s %(levelname)s: %(message)s'
-)
 
 app = Flask(__name__)
 
@@ -71,7 +62,7 @@ def get_all_hoteles():
         return jsonify({'error': str(e)}), 500
     response = []
     for row in result:
-        response.append({'id':row[0], 'nombre':row[1]})
+        response.append({'id': row[0], 'nombre': row[1], 'imagen': row[2]})
     
     return jsonify(response), 200
 
@@ -138,7 +129,7 @@ def get_all_servicios():
         return jsonify({'error': str(e)}), 500
     response = []
     for row in result:
-        response.append({'nombre': row[0], 'descripcion': row[1], 'imagen': row[2]})
+        response.append({'nombre': row[0], 'descripcion': row[1], 'imagen': row[2], 'imagen_grande': row[3]})
     
     return jsonify(response), 200
 

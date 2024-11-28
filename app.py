@@ -130,13 +130,16 @@ def hotel_details(nombre):
 
     return render_template('hotel-details.html', hotel=hotel, servicios=servicios)
 
-@app.route('/hoteles')
-def hoteles():
-    return render_template('hoteles.html')
-
 @app.route('/about')
 def about():
-    return render_template('about.html')
+    try:    
+        response = requests.get(API_URL+'servicios')
+        response.raise_for_status()
+        servicios = response.json()
+    except Exception as e:
+        print (f"Error fetching data: {e}")
+        servicios = []
+    return render_template('about.html', servicios=servicios)
 
 @app.route('/reservas', methods=['GET','POST'])
 def reservas():
@@ -221,6 +224,10 @@ def registrarse():
 def logout():
     session.pop('usuario', None) 
     return redirect(url_for('login'))
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 if __name__ == '__main__':
     app.run(host = '0.0.0.0', debug=True)

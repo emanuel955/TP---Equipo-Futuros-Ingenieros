@@ -31,7 +31,7 @@
                 {% for habitacion in habitaciones %}
                     <div class="col-lg-4 col-md-6">
                         <div class="room-item">
-                            <img src="{{ url_for('static', filename='/img/room/room-1.jpg') }}" alt="{{ habitacion['nombre'] }}">
+                            <img src="{{ url_for('static', filename=habitacion['imagen']) }}" alt="{{ habitacion['nombre'] }}">
                             <div class="ri-text">
                                 <h4>{{ habitacion['nombre'] }}</h4>
                                 <h3>{{ habitacion['precio_diario'] }}$<span>/Pernight</span></h3>

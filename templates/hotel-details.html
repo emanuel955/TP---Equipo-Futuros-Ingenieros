@@ -43,7 +43,13 @@
                                 <tbody>
                                     <tr><td class="r-o"">Location:</td><td class="r-d">{{ hotel[0]['ubicacion'] }}</td></tr>
                                     <tr><td class="r-o"">Stars:</td><td class="r-d">{{ hotel[0]['estrellas'] }}</td></tr>
-                                    <tr><td class="r-o"">Services:</td><td class="r-d">{{ hotel[0]['servicios'] }}</td></tr>
+                                    <tr><td class="r-o"">Services:</td>
+                                        <td class="r-d">
+                                            {% for servicio in servicios %}
+                                                {{ servicio['nombre'] }} <br>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

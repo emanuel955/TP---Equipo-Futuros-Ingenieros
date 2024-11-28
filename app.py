@@ -57,11 +57,17 @@ def index():
         response.raise_for_status()
         testimonios = response.json()
 
+        response = requests.get(API_URL+'servicios')
+        response.raise_for_status()
+        servicios = response.json()
+
     except Exception as e:
         print (f"Error fetching data: {e}")
         hoteles = []
         testimonios = []
-    return render_template('index.html', hoteles=hoteles, testimonios=testimonios)
+        servicios = []
+
+    return render_template('index.html', hoteles=hoteles, testimonios=testimonios, servicios=servicios)
 
 @app.route('/rooms', methods=['GET', 'POST'])
 def rooms():
@@ -109,10 +115,16 @@ def hotel_details(nombre):
         response = requests.get(API_URL+'hoteles/'+str(id))
         response.raise_for_status()
         hotel = response.json()
+
+        response = requests.get(API_URL+'servicios')
+        response.raise_for_status()
+        servicios = response.json()
     except requests.exceptions.RequestException as e:
         print (f"Error fetching data: {e}")
         hotel = []
-    return render_template('hotel-details.html', hotel=hotel)
+        servicios = []
+
+    return render_template('hotel-details.html', hotel=hotel, servicios=servicios)
 
 @app.route('/hoteles')
 def hoteles():
@@ -147,6 +159,7 @@ def reservas():
     except Exception as e:
         print(f"Error fetching data: {e}")
         reservas = []
+        
     return render_template('reservas.html', reservas=reservas)
 
 @app.route('/login',methods=['GET','POST'])

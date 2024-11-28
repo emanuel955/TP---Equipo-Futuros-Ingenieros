@@ -101,9 +101,6 @@ def get_habitaciones_disponibles():
         if not hotel_id or not fecha_entrada or not fecha_salida:
             return jsonify({'error': 'Faltan parámetros obligatorios'}), 400
 
-        # Verifica datos en logs (borrar en produccion)
-        print(f"Hotel ID: {hotel_id}, Fecha Entrada: {fecha_entrada}, Fecha Salida: {fecha_salida}")
-
         result = querys.habitaciones_disponibles(datos)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -133,6 +130,32 @@ def get_usuario_by_mail():
     
     return jsonify(response), 200
 
+@app.route('/api/v1/servicios', methods=['GET'])
+def get_all_servicios():
+    try:
+        result = querys.all_servicios()
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    response = []
+    for row in result:
+        response.append({'nombre': row[0], 'descripcion': row[1], 'imagen': row[2]})
+    
+    return jsonify(response), 200
+
+@app.route('/api/v1/servicios/<int:id>', methods=['GET'])
+def get_servicio_by_id():
+    try:
+        datos = request.get_json()
+        id = datos['id']
+        result = querys.servicio_by_id(id)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    response = []
+    for row in result:
+        response.append({'nombre': row[0]})
+    
+    return jsonify(response), 200
+
 @app.route('/api/v1/reservas/ingresar', methods=['POST'])
 def ingresar_reserva():
     try:
@@ -146,7 +169,6 @@ def ingresar_reserva():
                 id_reserva = querys.ingresar_reserva(datos)
                 if id_reserva:
                     datos = {'id_reserva': id_reserva}
-                    print(datos)
                     querys.ingresar_reserva_servicios(datos)
                     return '', 201
                 else:
@@ -177,15 +199,17 @@ def get_reservas_by_id_usuario(id_usuario):
         salida = datetime.strptime(fecha_salida, formato)
         cantidad_dias = (salida - entrada).days
 
-        result = querys.servicios_by_id_reserva(row[0])
+        servicios_contratados = []
+        result = querys.reservas_servicios_by_id_reserva(row[0])
         if result is None:
             return []
         else:
-            columnas_servicios = ['masaje','rio','desayuno']
-            servicios_activos = []
-            for columna, activo in zip(columnas_servicios,result):
-                if activo:
-                    servicios_activos.append(columna)
+            servicios = []
+            for servicio in result:
+                servicios.append(servicio[0])
+            for id_servicio in servicios:
+                result_servicio = querys.servicio_by_id(id_servicio)
+                servicios_contratados.append(result_servicio[0])
 
         response.append({
             'id': row[0],
@@ -194,7 +218,7 @@ def get_reservas_by_id_usuario(id_usuario):
             'fecha_entrada': fecha_entrada,
             'fecha_salida': fecha_salida,
             'precio': row[5]*cantidad_dias,
-            'servicios': servicios_activos
+            'servicios': servicios_contratados
         })
     
     return jsonify(response), 200
